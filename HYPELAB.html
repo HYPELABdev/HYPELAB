@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 
-<title>HYPELAB — Infraestrutura Digital</title>
+<title>HYPELAB — Vitrines Digitais Premium</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 
@@ -148,9 +148,9 @@ body{
     text-transform: uppercase;
 }
 
-h1{ font-size:clamp(40px,10vw,80px); line-height:.95; letter-spacing:-3px; font-weight:800; margin-bottom:20px; }
-.grad-text{ background:linear-gradient(180deg, #fff 50%, #666 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-.hero p{ color:#777; font-size:16px; line-height:1.6; max-width:550px; margin-bottom:35px; }
+h1{ font-size:clamp(34px,8.5vw,72px); line-height:1.0; letter-spacing:-2px; font-weight:800; margin-bottom:20px; }
+.grad-text{ background:linear-gradient(180deg, #fff 50%, #999 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.hero p{ color:#aaaaaa; font-size:16px; line-height:1.6; max-width:600px; margin-bottom:35px; }
 
 /* DASHBOARD OPERACIONAL */
 .central-operacional {
@@ -158,7 +158,7 @@ h1{ font-size:clamp(40px,10vw,80px); line-height:.95; letter-spacing:-3px; font-
     border: 1px solid var(--border);
     border-radius: 24px;
     padding: 22px;
-    margin: 25px auto;
+    margin: 25px auto 60px;
     max-width: 500px;
     text-align: left;
 }
@@ -245,10 +245,131 @@ h1{ font-size:clamp(40px,10vw,80px); line-height:.95; letter-spacing:-3px; font-
 .activity-right { text-align: right; font-family: 'JetBrains Mono', monospace; }
 .activity-status { font-size: 12px; font-weight: 700; }
 
+/* NOVAS SEÇÕES DE POSICIONAMENTO COMERCIAL */
+.section-wrapper {
+    margin-top: 80px;
+    padding: 10px 0;
+}
+.section-title-commercial {
+    text-align: center;
+    margin-bottom: 35px;
+}
+.section-title-commercial span {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--primary);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+.section-title-commercial h2 {
+    font-size: clamp(24px, 6vw, 36px);
+    font-weight: 800;
+    margin-top: 6px;
+    letter-spacing: -1px;
+}
+
+/* GRID DE SEGMENTOS */
+.segments-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+.segment-card {
+    background: rgba(10, 10, 10, 0.6);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 25px;
+    transition: border-color 0.3s ease;
+}
+.segment-card:hover {
+    border-color: rgba(34, 197, 94, 0.3);
+}
+.segment-card h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.segment-card h3 i {
+    color: var(--primary);
+}
+.segment-card p {
+    color: #888;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* FLUXO DE ETAPAS */
+.steps-timeline {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+.step-item {
+    background: rgba(255,255,255,0.01);
+    border: 1px dashed var(--border);
+    border-radius: 20px;
+    padding: 25px;
+}
+.step-number {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--primary);
+    font-size: 13px;
+    font-weight: 800;
+    margin-bottom: 12px;
+    display: block;
+}
+.step-item h4 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+.step-item p {
+    color: #777;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+/* DEMO SHOWCASE BLOCK */
+.demo-showcase {
+    background: linear-gradient(135deg, rgba(34,197,94,0.03) 0%, rgba(0,0,0,0) 100%);
+    border: 1px solid rgba(34, 197, 94, 0.15);
+    border-radius: 24px;
+    padding: 40px 25px;
+    text-align: center;
+    max-width: 650px;
+    margin: 0 auto;
+}
+.demo-showcase p {
+    color: #999;
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
+.btn-outline-demo {
+    background: transparent;
+    border: 1px solid var(--primary);
+    color: var(--primary);
+    padding: 16px 28px;
+    border-radius: 16px;
+    font-weight: 800;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-block;
+}
+.btn-outline-demo:hover {
+    background: rgba(34, 197, 94, 0.1);
+}
+
 /* PLANOS */
 .infra-section-title {
     text-align: center;
-    margin: 50px 0 25px;
+    margin: 80px 0 25px;
 }
 .infra-section-title span {
     font-family: 'JetBrains Mono', monospace;
@@ -420,11 +541,6 @@ h1{ font-size:clamp(40px,10vw,80px); line-height:.95; letter-spacing:-3px; font-
     animation: flashGlass 0.5s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
 }
 
-@keyframes flashGlass {
-    0% { left: -100%; opacity: 1; }
-    100% { left: 150%; opacity: 0; }
-}
-
 .list{ list-style:none; margin-bottom:30px; }
 .list li{ display:flex; align-items:flex-start; gap:10px; margin-bottom:12px; color:#999; font-size:13px; font-weight: 500; line-height: 1.4; }
 .list li i{ color:var(--primary); margin-top: 2px; flex-shrink: 0; display: inline-flex; }
@@ -546,16 +662,18 @@ h1{ font-size:clamp(40px,10vw,80px); line-height:.95; letter-spacing:-3px; font-
 </nav>
 
 <main class="container">
+    <!-- HERO SECTION REPOSICIONADA -->
     <section id="home" class="hero">
-        <div class="badge">SISTEMA ATUALIZADO V5.0.2</div>
-        <h1 class="grad-text">ESTRUTURAS DIGITAIS<br>DE ALTA CONVERSÃO.</h1>
-        <p>Sistemas projetados para escala massiva e vendas agressivas.</p>
-        <button class="btn btn-primary" onclick="location.href='#planos'" style="max-width: 280px;">COMEÇAR AGORA</button>
+        <div class="badge">DESIGN PREMIUM + SIMPLICIDADE</div>
+        <h1 class="grad-text">TRANSFORME SEU INSTAGRAM<br>EM UMA VITRINE DIGITAL.</h1>
+        <p>Receba pedidos organizados direto no seu WhatsApp com um mini site moderno, ultra veloz e fácil de usar. Sem a complexidade e sem as taxas pesadas de um e-commerce tradicional.</p>
+        <button class="btn btn-primary" onclick="location.href='#planos'" style="max-width: 280px;">CRIAR MINHA VITRINE AGORA</button>
     </section>
 
+    <!-- DASHBOARD DE PERFORMANCE (Mantido para o visual premium) -->
     <section class="central-operacional">
         <div class="central-title">
-            <i data-lucide="activity" width="14" height="14"></i> DASHBOARD DE PERFORMANCE GLOBAL
+            <i data-lucide="activity" width="14" height="14"></i> FLUXO DE PEDIDOS REAL-TIME
         </div>
         
         <div class="live-chart-box">
@@ -576,47 +694,139 @@ h1{ font-size:clamp(40px,10vw,80px); line-height:.95; letter-spacing:-3px; font-
             <div class="activity-left">
                 <div class="activity-icon-box"><i data-lucide="shopping-bag" width="15" height="15"></i></div>
                 <div class="activity-info">
-                    <h4>Nova Licença Ativada</h4>
-                    <p>Plano Catálogo Estrutural</p>
+                    <h4>Nova Vitrine Ativada</h4>
+                    <p>Loja de Roupas & Acessórios</p>
                 </div>
             </div>
-            <div class="activity-right"><div class="activity-status" style="color:#22c55e;">R$150</div></div>
+            <div class="activity-right"><div class="activity-status" style="color:#22c55e;">Ativo</div></div>
         </div>
         <div class="activity-row">
             <div class="activity-left">
                 <div class="activity-icon-box"><i data-lucide="zap" width="15" height="15"></i></div>
                 <div class="activity-info">
-                    <h4>Upgrade Realizado</h4>
-                    <p>Plano Vitrinni PRO</p>
+                    <h4>Upgrade Concluído</h4>
+                    <p>Vitrine PRO Avançada</p>
                 </div>
             </div>
-            <div class="activity-right"><div class="activity-status" style="color:#22c55e;">R$350</div></div>
+            <div class="activity-right"><div class="activity-status" style="color:#22c55e;">Ativo</div></div>
         </div>
     </section>
 
+    <!-- NOVA SEÇÃO: PRA QUEM É ISSO? -->
+    <section class="section-wrapper">
+        <div class="section-title-commercial">
+            <span>Identificação</span>
+            <h2>Seu negócio com cara de marca grande.</h2>
+        </div>
+        <div class="segments-grid">
+            <div class="segment-card">
+                <h3><i data-lucide="shirt"></i> Lojas & Grifes</h3>
+                <p>Mostre suas peças e coleções com layouts limpos, elegantes e de alta conversão visual.</p>
+            </div>
+            <div class="segment-card">
+                <h3><i data-lucide="utensils"></i> Delivery & Doces</h3>
+                <p>Facilite a escolha do cardápio e receba o pedido detalhado sem conversas confusas.</p>
+            </div>
+            <div class="segment-card">
+                <h3><i data-lucide="sparkles"></i> Beleza & Cosméticos</h3>
+                <p>Destaque seus produtos físicos ou serviços com a estética premium que eles merecem.</p>
+            </div>
+            <div class="segment-card">
+                <h3><i data-lucide="smartphone"></i> Adegas & Eletrônicos</h3>
+                <p>Organize especificações técnicas ou listas de produtos para o cliente achar tudo em segundos.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- NOVA SEÇÃO: COMO FUNCIONA -->
+    <section class="section-wrapper">
+        <div class="section-title-commercial">
+            <span>Simplicidade</span>
+            <h2>Sua vitrine no ar em 4 passos simples.</h2>
+        </div>
+        <div class="steps-timeline">
+            <div class="step-item">
+                <span class="step-number">PASSO 01</span>
+                <h4>Envie Fotos e Preços</h4>
+                <p>Você passa sua logo e as informações essenciais dos seus produtos. Cuidamos do resto.</p>
+            </div>
+            <div class="step-item">
+                <span class="step-number">PASSO 02</span>
+                <h4>Nós Estruturamos</h4>
+                <p>Criamos um design magnético e adaptado perfeitamente para a identidade do seu negócio.</p>
+            </div>
+            <div class="step-item">
+                <span class="step-number">PASSO 03</span>
+                <h4>Receba seu Link</h4>
+                <p>Um link leve e ultra rápido pronto para você fixar na sua Bio do Instagram ou TikTok.</p>
+            </div>
+            <div class="step-item">
+                <span class="step-number">PASSO 04</span>
+                <h4>Venda pelo WhatsApp</h4>
+                <p>O cliente escolhe o que quer no seu site e o carrinho chega mastigado no seu WhatsApp.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- NOVA SEÇÃO: POR QUE USAR A HYPELAB -->
+    <section class="section-wrapper">
+        <div class="section-title-commercial">
+            <span>Vantagens Competitivas</span>
+            <h2>Mais profissionalismo. Menos barreiras de compra.</h2>
+        </div>
+        <div class="segments-grid">
+            <div class="segment-card">
+                <h3><i data-lucide="gauge"></i> Velocidade Máxima</h3>
+                <p>Seu site abre instantaneamente. Sem telas de carregamento lentas que fazem o cliente desistir da compra.</p>
+            </div>
+            <div class="segment-card">
+                <h3><i data-lucide="shield-check"></i> Percepção de Valor</h3>
+                <p>A estética futurista premium passa segurança. O cliente confia mais, compra mais rápido e valoriza seu produto.</p>
+            </div>
+            <div class="segment-card">
+                <h3><i data-lucide="smartphone"></i> Foco Total no Celular</h3>
+                <p>99% das suas vendas vêm do mobile. Nossa interface é desenhada sob medida para a experiência dos dedos.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- NOVA SEÇÃO: VEJA EXEMPLOS REAIS -->
+    <section class="section-wrapper">
+        <div class="section-title-commercial">
+            <span>Garantia Visual</span>
+            <h2>Veja o design que está mudando o jogo.</h2>
+        </div>
+        <div class="demo-showcase">
+            <p>Não compre no escuro. Nós desenvolvemos layouts reais rodando com fluidez total para você testar a velocidade e a facilidade de navegação com seus próprios olhos.</p>
+            <a href="https://hypelabdev.github.io/HYPELAB/VITRINNI.html" class="btn-outline-demo">VER EXEMPLOS AO VIVO <i data-lucide="arrow-up-right" width="14" height="14" style="vertical-align: middle; margin-left: 4px;"></i></a>
+        </div>
+    </section>
+
+    <!-- SEÇÃO DE PLANOS ATUALIZADA (COPYWRITING CLARO) -->
     <section id="planos">
         <div class="infra-section-title">
-            <span>INFRAESTRUTURA</span>
-            <h2>Planos operacionais.</h2>
+            <span>OPÇÕES ACESSÍVEIS</span>
+            <h2>Escolha o seu modelo de vitrine.</h2>
         </div>
 
         <div class="tabs-container">
             <button class="tab-btn">
-                <div class="tab-badge-mini hot">QUENTE 🔥</div>
-                CATÁLOGO
+                <div class="tab-badge-mini hot">POPULAR 🔥</div>
+                VITRINE BASE
             </button>
             <button class="tab-btn active">
-                <div class="tab-badge-mini selected">MAIS ESCOLHIDO</div>
-                VITRINNI
+                <div class="tab-badge-mini selected">MAIS VENDIDO</div>
+                VITRINNI PRO
             </button>
-            <button class="tab-btn">CUSTOM</button>
+            <button class="tab-btn">EXCLUSIVO</button>
         </div>
 
         <div class="plans-grid">
-            <div class="card" id="card-catalogo" onclick="triggerPremiumClick(this, 'Plano Catálogo')">
+            <!-- CARD VITRINE DIGITAL BASE -->
+            <div class="card" id="card-catalogo" onclick="triggerPremiumClick(this, 'Vitrine Digital Base')">
                 <div class="card-content">
-                    <h3>CATÁLOGO</h3>
-                    <p style="color:#555; font-size:11px; font-weight:700; margin-top:5px; font-family:'JetBrains Mono';">ESTRUTURA SIMPLES</p>
+                    <h3>VITRINE BASE</h3>
+                    <p style="color:#555; font-size:11px; font-weight:700; margin-top:5px; font-family:'JetBrains Mono';">SIMPLES E DIRETA</p>
                     
                     <div class="price">
                         <span class="currency-symbol">R$</span><span id="price-catalogo">150</span><span class="period-label" id="period-catalogo">/mês</span>
@@ -631,19 +841,20 @@ h1{ font-size:clamp(40px,10vw,80px); line-height:.95; letter-spacing:-3px; font-
                     </div>
 
                     <ul class="list" style="margin-top: 20px;">
-                        <li><i data-lucide="check-circle-2"></i> Catálogo Essencial Editável</li>
-                        <li><i data-lucide="check-circle-2"></i> Edição Direta e Rápida no Próprio Catálogo</li>
-                        <li><i data-lucide="check-circle-2"></i> Menu Lateral Totalmente Protegido por Senha</li>
-                        <li><i data-lucide="check-circle-2"></i> Github Hypelab Host Grátis</li>
-                        <li><i data-lucide="check-circle-2"></i> Conexão Segura com Certificado SSL</li>
+                        <li><i data-lucide="check-circle-2"></i> Vitrine digital editável pelo celular</li>
+                        <li><i data-lucide="check-circle-2"></i> Alteração instantânea de fotos e preços</li>
+                        <li><i data-lucide="check-circle-2"></i> Painel interno protegido por senha de segurança</li>
+                        <li><i data-lucide="check-circle-2"></i> Hospedagem inclusa sem custos mensais extras</li>
+                        <li><i data-lucide="check-circle-2"></i> Link seguro com certificado SSL ativo</li>
                     </ul>
                 </div>
                 <button class="btn btn-primary">ADQUIRIR PLANO</button>
             </div>
 
-            <div class="card featured" id="card-vitrinni" onclick="triggerPremiumClick(this, 'Plano Vitrinni PRO')">
+            <!-- CARD VITRINNI PRO -->
+            <div class="card featured" id="card-vitrinni" onclick="triggerPremiumClick(this, 'Vitrine Vitrinni PRO')">
                 <div class="card-content">
-                    <div class="badge-discount" style="background:#fff; color:#000;">SaaS PREMIUM</div>
+                    <div class="badge-discount" style="background:#fff; color:#000;">VITRINE PREMIUM</div>
                     <h3>VITRINNI PRO</h3>
                     <p style="color:var(--primary); font-size:11px; font-weight:700; margin-top:5px; font-family:'JetBrains Mono';">SISTEMA COMPLETO</p>
                     
@@ -660,16 +871,17 @@ h1{ font-size:clamp(40px,10vw,80px); line-height:.95; letter-spacing:-3px; font-
                     </div>
 
                     <ul class="list" style="margin-top: 20px;">
-                        <li><i data-lucide="check-circle-2"></i> Sistema Vitrinnis Avançado</li>
-                        <li><i data-lucide="check-circle-2"></i> Páginas Estáticas Prontas e Ultra-Velozes</li>
-                        <li><i data-lucide="check-circle-2"></i> Design com Elementos Animados Premium</li>
-                        <li><i data-lucide="check-circle-2"></i> Painel Editor Robusto Estilo SaaS (Edita Tudo)</li>
-                        <li><i data-lucide="check-circle-2"></i> Github Hypelab Host Grátis + Proteção SLA/SSL</li>
+                        <li><i data-lucide="check-circle-2"></i> Páginas completas com carregamento instantâneo</li>
+                        <li><i data-lucide="check-circle-2"></i> Design sofisticado com animações fluidas</li>
+                        <li><i data-lucide="check-circle-2"></i> Gerenciamento de categorias e múltiplos banners</li>
+                        <li><i data-lucide="check-circle-2"></i> Painel administrador mestre robusto e intuitivo</li>
+                        <li><i data-lucide="check-circle-2"></i> Suporte prioritário + Entrega em até 24h úteis</li>
                     </ul>
                 </div>
-                <button class="btn btn-primary">ATIVAR OPERAÇÃO</button>
+                <button class="btn btn-primary">ATIVAR VITRINE</button>
             </div>
 
+            <!-- CARD CUSTOM ELITE -->
             <div class="card" onclick="triggerPremiumClick(this, 'Infra Custom Elite')">
                 <div class="card-content">
                     <div class="badge-discount">EXCLUSIVIDADE</div>
@@ -679,19 +891,19 @@ h1{ font-size:clamp(40px,10vw,80px); line-height:.95; letter-spacing:-3px; font-
                     <div class="price">
                         <span class="currency-symbol">R$</span>3.250<span class="period-label">/anual</span>
                     </div>
-                    <div class="price-saving-badge" style="color: #000; background: var(--primary);">CONTRATO EXCLUSIVO</div>
+                    <div class="price-saving-badge" style="color: #000; background: var(--primary);">CONTRATO ANUAL</div>
                     
                     <div style="height: 12px;"></div>
 
                     <ul class="list" style="margin-top: 20px;">
-                        <li><i data-lucide="check-circle-2"></i> Painel Totalmente Único com a sua Identidade Visual</li>
-                        <li><i data-lucide="check-circle-2"></i> Estrutura Multi-páginas (Quem Somos, Subpáginas, etc)</li>
-                        <li><i data-lucide="check-circle-2"></i> Menu Único Centralizado para Editar Todas as Telas</li>
-                        <li><i data-lucide="check-circle-2"></i> Domínio Próprio (.com ou .com.br) Incluso Grátis</li>
-                        <li><i data-lucide="check-circle-2"></i> Suporte VIP Exclusivo de Escala Anual</li>
+                        <li><i data-lucide="check-circle-2"></i> Design 100% sob medida com a cara da sua marca</li>
+                        <li><i data-lucide="check-circle-2"></i> Estrutura de várias páginas (Quem Somos, Links, etc)</li>
+                        <li><i data-lucide="check-circle-2"></i> Painel unificado para controle geral das seções</li>
+                        <li><i data-lucide="check-circle-2"></i> Registro de domínio próprio (.com ou .com.br) grátis</li>
+                        <li><i data-lucide="check-circle-2"></i> Canal de suporte VIP direto com os desenvolvedores</li>
                     </ul>
                 </div>
-                <button class="btn btn-primary">ADQUIRIR ELITE</button>
+                <button class="btn btn-primary">CONTRATAR ELITE</button>
             </div>
         </div>
     </section>
@@ -784,7 +996,7 @@ function triggerPremiumClick(cardElement, title) {
     cardElement.classList.add('premium-click-effect');
     
     let targetPrice = "3.250,00 (Anual)"; 
-    if(title.includes("Catálogo")) {
+    if(title.includes("Base")) {
         targetPrice = currentPeriods.catalogo.valor + ",00" + (currentPeriods.catalogo.meses > 1 ? ` (Combo ${currentPeriods.catalogo.meses} Meses)` : ' / Mês');
     } else if(title.includes("Vitrinni")) {
         targetPrice = currentPeriods.vitrinni.valor + ",00" + (currentPeriods.vitrinni.meses > 1 ? ` (Combo ${currentPeriods.vitrinni.meses} Meses)` : ' / Mês');
@@ -823,13 +1035,13 @@ function sendWhatsApp() {
     const num = "5511949946730";
     const priceText = document.getElementById('pay-price').innerText;
     const planText = document.getElementById('pay-title').innerText;
-    const msg = encodeURIComponent(`Olá Hypelab! Quero ativar o seu ${planText} no valor total de ${priceText}.`);
+    const msg = encodeURIComponent(`Olá Hypelab! Quero ativar o meu ${planText} no valor total de ${priceText}.`);
     window.open(`https://wa.me/${num}?text=${msg}`, '_blank');
 }
 
-/* PROVA SOCIAL */
-const names=["Felipe M.","Rodrigo S.","Bruno Costa","Glauber H.","Lucas R.","Gabriel N."];
-const items=["Plano Catálogo","Plano Vitrinni PRO","Infra Custom Elite"];
+/* PROVA SOCIAL COM TEXTO SIMPLIFICADO */
+const names=["Felipe M.","Rodrigo S.","Bruno C.","Glauber H.","Lucas R.","Gabriel N."];
+const items=["Vitrine Base","Vitrine Vitrinni PRO","Custom Elite"];
 
 function pushNotif(){
     const box = document.getElementById('notification-box');
@@ -839,7 +1051,7 @@ function pushNotif(){
 
     const d = document.createElement('div');
     d.className = 'notif';
-    d.innerHTML = `<div class="pulse-icon"></div><div class="notif-text"><b>${n}</b> contratou o <b>${i}</b> com sucesso!</div>`;
+    d.innerHTML = `<div class="pulse-icon"></div><div class="notif-text"><b>${n}</b> montou sua <b>${i}</b> com sucesso!</div>`;
     box.appendChild(d);
     
     setTimeout(() => d.classList.add('show'), 200);
@@ -854,61 +1066,61 @@ setTimeout(() => {
     setInterval(pushNotif, 28000);
 }, 14000);
 
-/* FLUXOS INFORMATIVOS E HUMANIZADOS DO BOT */
+/* FLUXOS INFORMATIVOS E HUMANIZADOS DO BOT (REPOSICIONADO PARA CLIENTE COMUM) */
 const chatWindow = document.getElementById('chat-window');
 const optionsArea = document.getElementById('options-area');
 let hbotIniciado = false;
 
 const fluxos = {
     inicio: {
-        msg: "Olá! Sou o assistente oficial da HYPELAB. Como posso impulsionar sua operação hoje?",
+        msg: "Olá! Sou o assistente oficial da HYPELAB. Quer transformar seu Instagram em uma vitrine de vendas profissional e receber pedidos direto no seu WhatsApp? Como posso te ajudar hoje?",
         opcoes: [
-            { texto: "Conhecer os Planos ⚡", proximo: "planos_info" },
-            { texto: "Prazos e Envios ⏳", proximo: "prazos" },
+            { texto: "Conhecer Modelos ⚡", proximo: "planos_info" },
             { texto: "Como funciona? ⚙️", proximo: "funcionamento" },
-            { texto: "Falar com Humano 👤", proximo: "whatsapp" }
+            { texto: "Prazos de Entrega ⏳", proximo: "prazos" },
+            { texto: "Falar com Atendente 👤", proximo: "whatsapp" }
         ]
     },
     planos_info: {
-        msg: "Temos estruturas focadas em conversão máxima. Qual você deseja analisar?",
+        msg: "Criamos páginas focadas em clareza e facilidade de compra para o seu cliente comum. Qual modelo quer conhecer?",
         opcoes: [
-            { texto: "Plano Catálogo", proximo: "info_catalogo" },
-            { texto: "Plano Vitrinni PRO", proximo: "info_vitrinni" },
-            { texto: "Custom Elite", proximo: "info_elite" },
+            { texto: "Vitrine Base", proximo: "info_catalogo" },
+            { texto: "Vitrine PRO Avançada", proximo: "info_vitrinni" },
+            { texto: "Custom Elite Única", proximo: "info_elite" },
             { texto: "Voltar ao Início", proximo: "inicio" }
         ]
     },
     info_catalogo: {
-        msg: "📦 *PLANO CATÁLOGO (R$ 150/mês)*\nIdeal para quem busca simplicidade e agilidade. É um catálogo estrutural totalmente editável por você através de uma área administrativa oculta e protegida por senha. Perfeito para listagem direta de produtos.",
+        msg: "📦 *VITRINE DIGITAL BASE (R$ 150/mês)*\nIdeal para quem quer começar rápido. Um mini site de vendas totalmente editável direto pelo seu celular. Seus clientes escolhem os produtos e o pedido chega pronto e organizado no seu WhatsApp.",
         opcoes: [
-            { texto: "Ver outros planos", proximo: "planos_info" },
-            { texto: "Fechamento Direto 💸", proximo: "whatsapp", planSet: { nome: "Plano Catálogo", valor: "150" } }
+            { texto: "Ver outros modelos", proximo: "planos_info" },
+            { texto: "Quero este modelo 💸", proximo: "whatsapp", planSet: { nome: "Vitrine Digital Base", valor: "150" } }
         ]
     },
     info_vitrinni: {
-        msg: "🔥 *VITRINNI PRO (R$ 350/mês)*\nNosso sistema SaaS completo e mais vendido! Entrega páginas estáticas com carregamento ultra-rápido, animações premium e um painel de controle robusto onde você edita absolutamente tudo de forma simples. Focado em escala massiva.",
+        msg: "🔥 *VITRINNI PRO (R$ 350/mês)*\nNosso modelo mais vendido! Um mini site completo com design magnético de alta grife, carregamento instantâneo e painel mestre completo para gerenciar categorias e produtos. Passa total confiança ao comprador.",
         opcoes: [
-            { texto: "Ver outros planos", proximo: "planos_info" },
-            { texto: "Fechamento Direto 💸", proximo: "whatsapp", planSet: { nome: "Plano Vitrinni PRO", valor: "350" } }
+            { texto: "Ver outros modelos", proximo: "planos_info" },
+            { texto: "Quero o Vitrinni PRO 💸", proximo: "whatsapp", planSet: { nome: "Vitrine PRO Avançada", valor: "350" } }
         ]
     },
     info_elite: {
-        msg: "👑 *CUSTOM ELITE (R$ 3.250 Anual)*\nExclusividade total. Desenvolvemos uma estrutura multi-páginas única com a identidade visual da sua marca. Inclui domínio próprio (.com/.com.br) grátis e suporte VIP direto com os fundadores para escalar seu ecossistema.",
+        msg: "👑 *CUSTOM ELITE (R$ 3.250 Anual)*\nExclusividade absoluta. Montamos um ecossistema comercial próprio com design único para sua marca, múltiplas páginas, domínio próprio incluso (.com ou .com.br) e assessoria VIP direta.",
         opcoes: [
-            { texto: "Ver outros planos", proximo: "planos_info" },
-            { texto: "Contratar Elite 👑", proximo: "whatsapp", planSet: { nome: "Infra Custom Elite", valor: "3.250" } }
+            { texto: "Ver outros modelos", proximo: "planos_info" },
+            { texto: "Garantir Vaga Elite 👑", proximo: "whatsapp", planSet: { nome: "Custom Elite Única", valor: "3.250" } }
         ]
     },
     prazos: {
-        msg: "⏳ *PRAZOS DE LIBERAÇÃO E ENVIO:*\n\n• *Painel Administrativo:* Ativação automática em até 1 hora útil após a validação do Pix.\n• *Estrutura Vitrinni/Catálogo:* Publicação e entrega em até 24h úteis rodando na nossa infraestrutura premium.",
+        msg: "⏳ *PRAZOS DE ENTREGA:*\n\n• *Acesso ao Painel:* Liberado em até 1 hora útil após a confirmação do Pix.\n• *Sua Vitrine no Ar:* Totalmente configurada e pronta para vender em até 24h úteis.",
         opcoes: [{ texto: "Voltar ao Menu", proximo: "inicio" }]
     },
     funcionamento: {
-        msg: "⚙️ *COMO FUNCIONA?*\n1. Você escolhe seu plano e o período ideal no site.\n2. Efetua o pagamento seguro via PIX direto no checkout.\n3. Envia o comprovante no suporte e recebe seus acessos na hora.\n4. Hospedagem profissional e SSL inclusos em servidores estáveis (Github Host Hypelab).",
-        opcoes: [{ texto: "Entendi, ver planos", proximo: "planos_info" }]
+        msg: "⚙️ *COMO FUNCIONA?*\n1. Você escolhe o plano ideal aqui no site.\n2. Faz o pagamento seguro via PIX.\n3. Envia suas fotos, logo e preços pelo nosso painel simples.\n4. Nós deixamos tudo pronto e você recebe o link para colocar na bio do Instagram e começar a faturar!",
+        opcoes: [{ texto: "Entendi, ver modelos", proximo: "planos_info" }]
     },
     whatsapp: {
-        msg: "Perfeito! Estou te direcionando para nossa mesa comercial humana. Clique no botão abaixo para concluir no WhatsApp.",
+        msg: "Excelente escolha. Estou te direcionando para nossa equipe comercial humana concluir seu pedido sem burocracia.",
         opcoes: [{ texto: "Chamar no WhatsApp 📲", link_dinamico: true, class: "btn-wa" }]
     }
 };
@@ -994,7 +1206,6 @@ function renderOptions(key) {
         btn.innerText = opt.texto;
         
         btn.onclick = () => {
-            // Se for o botão final com redirecionamento dinâmico do WhatsApp
             if(opt.link_dinamico) {
                 const num = "5511949946730";
                 const textMessage = encodeURIComponent(`Olá Hypelab! Estava conversando com o H-Bot e quero ativar o ${planoSelecionadoNoChat.nome} no valor de R$ ${planoSelecionadoNoChat.valor}.`);
@@ -1002,7 +1213,6 @@ function renderOptions(key) {
                 return;
             }
 
-            // Grava o plano selecionado caso a opção carregue essa meta-informação
             if(opt.planSet) {
                 planoSelecionadoNoChat = opt.planSet;
             }
@@ -1032,10 +1242,9 @@ function renderOptions(key) {
 function restartHBot() { 
     chatWindow.innerHTML = ''; 
     optionsArea.innerHTML = '';
-    planoSelecionadoNoChat = { nome: "Vitrinni PRO", valor: "350" }; // reseta padrão
+    planoSelecionadoNoChat = { nome: "Vitrinni PRO", valor: "350" };
     startHBotSequence(); 
 }
 </script>
-
 </body>
 </html>
