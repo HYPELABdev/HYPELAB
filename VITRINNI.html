@@ -429,7 +429,7 @@ h1{
     box-shadow:0 15px 30px rgba(34,197,94,.25);
 }
 
-/* BOTÃO PREMIUM DO WHATSAPP */
+/* BOTÃO PREMIUM DO WHATSAPP COM SEGREDO INTERNO */
 .btn-whatsapp-software {
     background: #22c55e;
     color: #000;
@@ -476,7 +476,7 @@ h1{
 .loader-text{ position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-family:'JetBrains Mono',monospace; color:#fff; font-size:12px; letter-spacing:3px; opacity:.6; animation:pulse 1.5s infinite ease-in-out; }
 @keyframes pulse{ 0%,100%{opacity:.3} 50%{opacity:.8} }
 
-/* HUD INTELIGENTE DO H-BOT */
+/* HUD INTELEGENTE DO H-BOT */
 .jarvis-hud-wrapper {
     position: fixed;
     bottom: 30px;
@@ -521,6 +521,7 @@ h1{
     animation: jarvisFloat 3s ease-in-out infinite;
 }
 
+/* ANIMAÇÃO ACELERADA PRO GATILHO DA LICENÇA */
 .jarvis-avatar.talking-fast {
     animation: jarvisFloat 0.8s ease-in-out infinite, jarvisFastPulse 0.4s ease-in-out infinite alternate;
     border-color: #fff;
@@ -610,7 +611,25 @@ h1{
 /* MOBILE */
 @media(max-width:768px){
     .grid-models{ grid-template-columns:1fr; padding-bottom:40px; }
-    .preview-container{ height:80vh; border-radius:18px; }
+    
+    /* 🚀 REFINAMENTO MOBILE DO PREVIEW: Ocupa a tela inteira sem esmagar */
+    .preview-overlay {
+        padding: 0 !important;
+    }
+    .preview-header {
+        width: 100% !important;
+        padding: 12px 20px !important;
+        margin-bottom: 0 !important;
+        background: #050505;
+        border-bottom: 1px solid rgba(255,255,255,.05);
+    }
+    .preview-container {
+        width: 100% !important;
+        height: calc(100vh - 55px) !important;
+        border-radius: 0 !important;
+        border: none !important;
+    }
+    
     .preview-header span{ display:none; }
     .tabs-container { gap: 10px; flex-wrap: wrap; }
     .tab-btn { padding: 12px 14px; font-size: 12px; }
@@ -797,8 +816,12 @@ const iframe = document.getElementById('previewIframe');
 const loaderBar = document.getElementById('loaderBar');
 const loaderText = document.getElementById('loaderText');
 
-// CONFIGURAÇÃO REAL DO SEU TELEFONE
-const SEU_WHATSAPP = "5511949946730";
+// CONFIGURAÇÃO: Seu Whatsapp real (Substitua mantendo o 55)
+const SEU_WHATSAPP = "5511999999999";
+
+// VARIÁVEIS DE CONTROLE DOS NOVOS GATILHOS
+let engagementTimer;
+let exitIntercepted = false;
 
 function switchTab(tabId) {
     document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
@@ -808,6 +831,44 @@ function switchTab(tabId) {
     document.getElementById(`tab-${tabId}`).classList.add('active-grid');
 
     triggerJarvisSpeech(tabId);
+}
+
+/* 🚀 FUNÇÃO AUXILIAR GERAL DO H-BOT PARA RESPOSTAS DIRETAS */
+function triggerCustomJarvis(protocol, text, hasWAButton = false, waMsg = "") {
+    clearTimeout(typingTimeout);
+    clearTimeout(hideTimeout);
+
+    const wrapper = document.getElementById("jarvisWrapper");
+    const protocolField = document.getElementById("jarvisProtocol");
+    const textField = document.getElementById("jarvisText");
+    const avatar = document.getElementById("jarvisAvatarImg");
+    const box = document.getElementById("jarvisBoxContent");
+
+    avatar.classList.remove("talking-fast");
+    box.classList.remove("highlight-box");
+
+    protocolField.innerText = protocol;
+    textField.innerHTML = "";
+    wrapper.classList.add("active");
+
+    let charIndex = 0;
+    function type() {
+        if (charIndex < text.length) {
+            textField.innerHTML += text.charAt(charIndex);
+            charIndex++;
+            typingTimeout = setTimeout(type, 10);
+        } else {
+            if (hasWAButton) {
+                const encodedMsg = encodeURIComponent(waMsg);
+                textField.innerHTML += `<br><br><a href="https://wa.me/${SEU_WHATSAPP}?text=${encodedMsg}" target="_blank" class="btn-preview btn-whatsapp-software" style="margin-top:10px; padding:12px; font-size:11px; text-align:center; display:block; text-decoration:none; color:#000; font-weight:800; border-radius:8px;">🚀 Finalizar no WhatsApp</a>`;
+            } else {
+                hideTimeout = setTimeout(() => {
+                    wrapper.classList.remove("active");
+                }, 9000);
+            }
+        }
+    }
+    type();
 }
 
 function openPreview(url){
@@ -821,6 +882,32 @@ function openPreview(url){
         loaderBar.style.width = '70%';
     },50);
     document.body.style.overflow = 'hidden';
+
+    // RESET DE ESTADO DOS NOVOS GATILHOS
+    clearTimeout(engagementTimer);
+    exitIntercepted = false;
+
+    // GATILHO 1: Se for o catálogo, entrega a senha imediatamente de forma curta
+    if (url.includes('catalogo.hypelabofc.site') || url.includes('levelup1')) {
+        setTimeout(() => {
+            triggerCustomJarvis(
+                "H-BOT // ACESSO_EDITOR", 
+                "Teste o editor em tempo real! Clique no painel do site e use a senha Hype420. Veja como é rápido deixar a loja com a sua cara!"
+            );
+        }, 1500);
+
+        // GATILHO 2: Monitora 5 minutos (300.000ms) editando para soltar o cupom de 10%
+        engagementTimer = setTimeout(() => {
+            const msgCupom = "Olá! Ganhei o cupom de 10% de desconto do H-Bot após testar o editor do catálogo e quero fechar minha licença.";
+            triggerCustomJarvis(
+                "H-BOT // BÔNUS_ENGANJAMENTO", 
+                "Parabéns pelo foco! Você está criando sua loja há 5 minutos. Liberei 10% DE DESCONTO exclusivo para você colocar seu site no ar agora mesmo. Aproveite!", 
+                true, 
+                msgCupom
+            );
+            document.getElementById("jarvisAvatarImg").classList.add("talking-fast");
+        }, 300000); 
+    }
 }
 
 iframe.onload = function(){
@@ -832,11 +919,34 @@ iframe.onload = function(){
 };
 
 function closePreview(){
+    // GATILHO 3: Interceptação de saída (Trava de segurança para conversão)
+    if (!exitIntercepted) {
+        exitIntercepted = true;
+        
+        const msgRetencao = "Olá! Estava editando minha Vitrine no ambiente demo e gostaria de finalizar o projeto com o suporte.";
+        triggerCustomJarvis(
+            "H-BOT // RETENÇÃO_CRÍTICA", 
+            "Atenção! Se você sair agora, vai perder todo o visual incrível que editou para sua loja. Garanta sua estrutura pronta agora e envie direto pro WhatsApp para finalizarmos!", 
+            true, 
+            msgRetencao
+        );
+
+        // Destaca o H-Bot na tela gerando urgência visual
+        document.getElementById("jarvisAvatarImg").classList.add("talking-fast");
+        document.getElementById("jarvisBoxContent").classList.add("highlight-box");
+        return; // Interrompe o fechamento da tela na primeira tentativa
+    }
+
+    // Se o cliente insistir e clicar em Fechar de novo, sai normalmente
+    clearTimeout(engagementTimer);
     overlay.classList.remove('active');
     setTimeout(()=>{
         overlay.style.display = 'none';
         iframe.src = '';
         iframe.classList.remove('loaded');
+        document.getElementById("jarvisAvatarImg").classList.remove("talking-fast");
+        document.getElementById("jarvisBoxContent").classList.remove("highlight-box");
+        document.getElementById("jarvisWrapper").classList.remove("active");
     },400);
     document.body.style.overflow = 'auto';
 }
@@ -851,15 +961,15 @@ let hideTimeout;
 const jarvisDatabase = {
     catalogos: {
         protocol: "H-BOT // PROTOCOLO_CATALOG",
-        text: "Varredura completa efetuada! O Plano Catálogo (R$ 150/mês) é o nosso campeão de vendas por um motivo: ele é estruturado milimetricamente para quem está começando. Entrega automação ágil, menu de navegação fluido de alta retenção e ativação imediata de caixa para iniciantes detonarem nas vendas."
+        text: "Varredura efetuada! O Plano Catálogo (R$ 150/mês) é estruturado milimetricamente para quem está começando. Entrega automação ágil, menu fluido de alta retenção e ativação rápida de vendas."
     },
     vitrinnis: {
         protocol: "H-BOT // PROTOCOLO_VITRINNI",
-        text: "Upgrade de sistema detectado! O Plano Vitrinnis (R$ 350/mês) foi desenvolvido para negócios consolidados que exigem autoridade extrema. Ele destrava nosso painel editor robusto com designs ultra-premium, focado em alta escala, branding imersivo e personalização total."
+        text: "Upgrade detectado! O Plano Vitrinnis (R$ 350/mês) foi desenvolvido para marcas que exigem autoridade extrema. Destrava designs ultra-premium com branding imersivo e personalização total."
     },
     softwares: {
         protocol: "H-BOT // PROTOCOLO_SOFTWARE",
-        text: "Diretriz de expansão detectada! Rompemos as barreiras dos sites convencionais. Na aba Softwares, disponibilizamos sistemas independentes, scripts de automação tática e inteligências integráveis (como eu mesmo!) para compra de licença definitiva. O ecossistema ideal para quem quer transformar linhas de código em ativos geradores de lucro."
+        text: "Diretriz de expansão ativa! Na aba Softwares, disponibilizamos sistemas independentes, scripts e inteligências integráveis (como eu mesmo!) para compra de licença definitiva e lucro direto."
     }
 };
 
@@ -913,13 +1023,12 @@ function interceptLicencePurchase(event) {
     box.classList.add("highlight-box");
     
     wrapper.classList.add("active");
-    protocolField.innerText = "H-BOT // CRITICAL_NEGOTIATION";
+    protocolField.innerText = "H-BOT // NEGOCIAÇÃO_DIRETA";
     textField.innerHTML = "";
 
-    const speechText = "Protocolo de licenciamento iniciado! Fico muito feliz que você tenha gostado da minha interface e autonomia. Pensando bem, R$ 197 por mês por uma IA avançada que trabalha 24 horas por dia, retém seus leads e nunca pede aumento? É praticamente de graça! Estou preparando seus arquivos de integração, te vejo no WhatsApp do meu criador!";
+    const speechText = "Licenciamento iniciado! Apenas R$ 197 por mês por um assistente inteligente rodando 24h, retendo leads e aumentando conversões. Estou organizando seus arquivos, te aguardo no WhatsApp do meu desenvolvedor!";
 
     let charIndex = 0;
-    
     function typeSpeech() {
         if (charIndex < speechText.length) {
             textField.innerHTML += speechText.charAt(charIndex);
@@ -936,10 +1045,8 @@ function interceptLicencePurchase(event) {
             }, 1500);
         }
     }
-    
     typeSpeech();
 }
 </script>
-
 </body>
 </html>
