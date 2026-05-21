@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -652,13 +653,13 @@ h1{
 </header>
 
 <div class="tabs-container">
-    <button class="tab-btn active" onclick="switchTab('vitrinnis')">
+    <button class="tab-btn active" onclick="switchTab('catalogos')">
+        Vitrine Express
+        <span>Menu Lateral de Produtos</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('vitrinnis')">
         Vitrinnis
         <span>Painel Editor Robustificado</span>
-    </button>
-    <button class="tab-btn" onclick="switchTab('catalogos')">
-        Catálogos
-        <span>Menu Lateral de Produtos</span>
     </button>
     <button class="tab-btn" onclick="switchTab('softwares')">
         <div class="tab-badge-new">NOVO</div>
@@ -667,34 +668,19 @@ h1{
     </button>
 </div>
 
-<div id="tab-vitrinnis" class="grid-models active-grid">
+<div id="tab-catalogos" class="grid-models active-grid">
     <div class="model-card">
-        <span class="badge-upgrade">🔥 UPGRADE RECOMENDADO</span>
+        <span class="badge-hot">⚡ MAIS VENDIDO </span>
         <div class="model-thumb">
-            <img src="https://cdn.jsdelivr.net/gh/HYPELABdev/Vitrinni/img/img_1778970422609.jpg" alt="Preview Moda">
+            <img src="https://cdn.jsdelivr.net/gh/HYPELABdev/Vitrinni/img/img_1778970422609.jpg" alt="Preview Catálogo">
             <div class="thumb-overlay">
-                <span class="thumb-label">MODEL_MODA_V1</span>
+                <span class="thumb-label">MODEL_CATALOG_V1</span>
             </div>
         </div>
         <div class="model-info">
-            <h3>MODELO VENDAS MODA</h3>
-            <p>Estrutura premium focada em branding, exclusividade visual e experiência sofisticada.</p>
-            <button class="btn-preview" onclick="openPreview('https://hypelabdev.github.io/Vitrinni/MODA.html?id=moda')">Visualizar Demo</button>
-        </div>
-    </div>
-
-    <div class="model-card">
-        <span class="badge-upgrade">🔥 UPGRADE RECOMENDADO</span>
-        <div class="model-thumb">
-            <img src="https://cdn.jsdelivr.net/gh/HYPELABdev/Vitrinni/img/img_1778970422609.jpg" alt="Preview Social">
-            <div class="thumb-overlay">
-                <span class="thumb-label">MODEL_SOCIAL_V1</span>
-            </div>
-        </div>
-        <div class="model-info">
-            <h3>MODELO VENDAS SEGUIDORES</h3>
-            <p>Interface moderna para nichos sociais, engajamento e captação de clientes digitais.</p>
-            <button class="btn-preview" onclick="openPreview('https://hypelabdev.github.io/Vitrinni/SEGUIDOR.html?id=levelup')">Visualizar Demo</button>
+            <h3>VITRINE EXPRESS</h3>
+            <p>Sistema ágil e simplificado com menu lateral nativo de produtos. Ideal para automação rápida de pedidos e alta conversão direta.</p>
+            <button class="btn-preview" onclick="openPreview('https://catalogo.hypelabofc.site/levelup1')">Visualizar Demo</button>
         </div>
     </div>
 
@@ -714,19 +700,40 @@ h1{
     </div>
 </div>
 
-<div id="tab-catalogos" class="grid-models">
-    <div class="model-card">
-        <span class="badge-hot">⚡ MAIS VENDIDO (QUENTE)</span>
+<div id="tab-vitrinnis" class="grid-models">
+    <div class="model-card locked">
+        <div class="locked-screen">
+            <span class="lock-icon">🔒</span>
+            <span class="lock-text">REQUER PLANO PREMIUM</span>
+        </div>
         <div class="model-thumb">
-            <img src="https://cdn.jsdelivr.net/gh/HYPELABdev/Vitrinni/img/img_1778970422609.jpg" alt="Preview Catálogo">
+            <img src="https://cdn.jsdelivr.net/gh/HYPELABdev/Vitrinni/img/img_1778970422609.jpg" alt="Preview Moda">
             <div class="thumb-overlay">
-                <span class="thumb-label">MODEL_CATALOG_V1</span>
+                <span class="thumb-label">MODEL_MODA_V1</span>
             </div>
         </div>
         <div class="model-info">
-            <h3>SISTEMA CATÁLOGO SMART</h3>
-            <p>Sistema ágil e simplificado com menu lateral nativo de produtos. Ideal para automação rápida de pedidos e alta conversão direta.</p>
-            <button class="btn-preview" onclick="openPreview('https://catalogo.hypelabofc.site/levelup1')">Visualizar Demo</button>
+            <h3>MODELO VENDAS MODA</h3>
+            <p>Estrutura premium focada em branding, exclusividade visual e experiência sofisticada.</p>
+            <button class="btn-preview" onclick="openPreview('https://hypelabdev.github.io/Vitrinni/MODA.html?id=moda')">Visualizar Demo</button>
+        </div>
+    </div>
+
+    <div class="model-card locked">
+        <div class="locked-screen">
+            <span class="lock-icon">🔒</span>
+            <span class="lock-text">REQUER PLANO PREMIUM</span>
+        </div>
+        <div class="model-thumb">
+            <img src="https://cdn.jsdelivr.net/gh/HYPELABdev/Vitrinni/img/img_1778970422609.jpg" alt="Preview Social">
+            <div class="thumb-overlay">
+                <span class="thumb-label">MODEL_SOCIAL_V1</span>
+            </div>
+        </div>
+        <div class="model-info">
+            <h3>MODELO VENDAS SEGUIDORES</h3>
+            <p>Interface moderna para nichos sociais, engajamento e captação de clientes digitais.</p>
+            <button class="btn-preview" onclick="openPreview('https://hypelabdev.github.io/Vitrinni/SEGUIDOR.html?id=levelup')">Visualizar Demo</button>
         </div>
     </div>
 
@@ -817,7 +824,7 @@ const loaderBar = document.getElementById('loaderBar');
 const loaderText = document.getElementById('loaderText');
 
 // CONFIGURAÇÃO: Seu Whatsapp real (Substitua mantendo o 55)
-const SEU_WHATSAPP = "5511999999999";
+const SEU_WHATSAPP = "5511949946730";
 
 // VARIÁVEIS DE CONTROLE DOS NOVOS GATILHOS
 let engagementTimer;
@@ -961,7 +968,7 @@ let hideTimeout;
 const jarvisDatabase = {
     catalogos: {
         protocol: "H-BOT // PROTOCOLO_CATALOG",
-        text: "Varredura efetuada! O Plano Catálogo (R$ 150/mês) é estruturado milimetricamente para quem está começando. Entrega automação ágil, menu fluido de alta retenção e ativação rápida de vendas."
+        text: "Varredura efetuada! O Plano Vitrine Express (R$ 150/mês) é estruturado milimetricamente para quem está começando. Entrega automação ágil, menu fluido de alta retenção e ativação rápida de vendas."
     },
     vitrinnis: {
         protocol: "H-BOT // PROTOCOLO_VITRINNI",
@@ -969,7 +976,7 @@ const jarvisDatabase = {
     },
     softwares: {
         protocol: "H-BOT // PROTOCOLO_SOFTWARE",
-        text: "Diretriz de expansão ativa! Na aba Softwares, disponibilizamos sistemas independentes, scripts e inteligências integráveis (como eu mesmo!) para compra de licença definitiva e lucro direto."
+        text: "Diretriz de expansão activa! Na aba Softwares, disponibilizamos sistemas independentes, scripts e inteligências integráveis (como eu mesmo!) para compra de licença definitiva e lucro direto."
     }
 };
 
@@ -1024,9 +1031,9 @@ function interceptLicencePurchase(event) {
     
     wrapper.classList.add("active");
     protocolField.innerText = "H-BOT // NEGOCIAÇÃO_DIRETA";
-    textField.innerHTML = "";
+    textField.innqerHTML = "";
 
-    const speechText = "Licenciamento iniciado! Apenas R$ 197 por mês por um assistente inteligente rodando 24h, retendo leads e aumentando conversões. Estou organizando seus arquivos, te aguardo no WhatsApp do meu desenvolvedor!";
+    const speechText = "Licen Apenas R$ 197 por mês por um assistente inteligente rodando 24h, retendo leads e aumentando conversões. Estou organizando seus arquivos, te aguardo no WhatsApp do meu desenvolvedor!";
 
     let charIndex = 0;
     function typeSpeech() {
