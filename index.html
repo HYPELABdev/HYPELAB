@@ -152,99 +152,6 @@ h1{ font-size:clamp(34px,8.5vw,72px); line-height:1.0; letter-spacing:-2px; font
 .grad-text{ background:linear-gradient(180deg, #fff 50%, #999 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
 .hero p{ color:#aaaaaa; font-size:16px; line-height:1.6; max-width:600px; margin-bottom:35px; }
 
-/* DASHBOARD OPERACIONAL */
-.central-operacional {
-    background: rgba(10, 10, 10, 0.85);
-    border: 1px solid var(--border);
-    border-radius: 24px;
-    padding: 22px;
-    margin: 25px auto 60px;
-    max-width: 500px;
-    text-align: left;
-}
-.central-title {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: var(--primary);
-    letter-spacing: 2px;
-    margin-bottom: 15px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-/* GRÁFICO DE BARRAS */
-.live-chart-box {
-    width: 100%;
-    height: 110px;
-    background: rgba(0,0,0,0.5);
-    border-radius: 16px;
-    border: 1px solid rgba(255,255,255,0.02);
-    margin-bottom: 20px;
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    padding: 15px 20px;
-}
-.chart-badge-live {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 8px;
-    background: rgba(34,197,94,0.15);
-    color: var(--primary);
-    padding: 3px 8px;
-    border-radius: 6px;
-    font-weight: 700;
-}
-.chart-bar {
-    width: 6%;
-    background: linear-gradient(180deg, var(--primary) 0%, rgba(34,197,94,0.1) 100%);
-    border-radius: 4px 4px 0 0;
-    height: 10%;
-    transform-origin: bottom;
-    animation: scaleBars 4s ease-in-out infinite alternate;
-    box-shadow: 0 0 15px rgba(34, 197, 94, 0.2);
-}
-
-.chart-bar:nth-child(1) { height: 15%; animation-delay: 0.1s; }
-.chart-bar:nth-child(2) { height: 25%; animation-delay: 0.3s; }
-.chart-bar:nth-child(3) { height: 20%; animation-delay: 0.2s; }
-.chart-bar:nth-child(4) { height: 40%; animation-delay: 0.5s; }
-.chart-bar:nth-child(5) { height: 35%; animation-delay: 0.4s; }
-.chart-bar:nth-child(6) { height: 60%; animation-delay: 0.7s; }
-.chart-bar:nth-child(7) { height: 50%; animation-delay: 0.6s; }
-.chart-bar:nth-child(8) { height: 80%; animation-delay: 0.9s; }
-.chart-bar:nth-child(9) { height: 75%; animation-delay: 0.8s; }
-.chart-bar:nth-child(10) { height: 95%; animation-delay: 1.1s; }
-
-@keyframes scaleBars {
-    0% { transform: scaleY(0.8); }
-    100% { transform: scaleY(1.1); }
-}
-
-.activity-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.03);
-}
-.activity-row:last-child { border: none; }
-.activity-left { display: flex; align-items: center; gap: 12px; }
-.activity-icon-box { 
-    width: 34px; height: 34px; border-radius: 10px; 
-    background: rgba(255,255,255,0.02); border: 1px solid var(--border);
-    display: flex; align-items: center; justify-content: center; color: var(--primary);
-}
-.activity-info h4 { font-size: 13px; font-weight: 700; color: #fff; }
-.activity-info p { font-size: 11px; color: #555; }
-.activity-right { text-align: right; font-family: 'JetBrains Mono', monospace; }
-.activity-status { font-size: 12px; font-weight: 700; }
-
 /* NOVAS SEÇÕES DE POSICIONAMENTO COMERCIAL */
 .section-wrapper {
     margin-top: 80px;
@@ -637,6 +544,134 @@ h1{ font-size:clamp(34px,8.5vw,72px); line-height:1.0; letter-spacing:-2px; font
 .btn-wa { background: #25D366 !important; color: white !important; width: 100%; border: none; }
 .reset-btn { text-align: center; padding: 10px 0; text-decoration: none; color: #444; font-size: 8px; font-weight: 800; font-family: 'JetBrains Mono'; background: rgba(0,0,0,0.4); }
 
+/* BANNER HERO */
+.hero-banner-section {
+    margin: 20px auto 60px;
+    max-width: 700px;
+    border-radius: 24px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    position: relative;
+    min-height: 200px;
+}
+.hero-banner-img {
+    width: 100%;
+    display: block;
+    border-radius: 24px;
+    object-fit: cover;
+}
+
+/* EXPRESS CTA BLOCK */
+.express-cta-block {
+    background: linear-gradient(135deg, rgba(34,197,94,0.08) 0%, rgba(0,0,0,0) 100%);
+    border: 1px solid rgba(34,197,94,0.25);
+    border-radius: 28px;
+    padding: 45px 30px;
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto 0;
+    position: relative;
+    overflow: hidden;
+}
+.express-cta-block::before {
+    content: '';
+    position: absolute;
+    top: -80px; left: 50%; transform: translateX(-50%);
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(34,197,94,0.07), transparent 70%);
+    pointer-events: none;
+}
+.express-cta-block .express-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--primary);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: block;
+}
+.express-cta-block h2 {
+    font-size: clamp(22px, 5.5vw, 32px);
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 14px;
+    line-height: 1.1;
+}
+.express-cta-block p {
+    color: #999;
+    font-size: 15px;
+    line-height: 1.65;
+    max-width: 550px;
+    margin: 0 auto 28px;
+}
+.express-pills {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 30px;
+}
+.express-pill {
+    background: rgba(34,197,94,0.07);
+    border: 1px solid rgba(34,197,94,0.2);
+    color: #ccc;
+    padding: 7px 14px;
+    border-radius: 99px;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.express-pill .pill-icon { color: var(--primary); }
+.btn-express-cta {
+    display: inline-block;
+    background: var(--primary);
+    color: #000;
+    font-weight: 900;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    padding: 20px 36px;
+    border-radius: 20px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.2s;
+    box-shadow: 0 0 30px rgba(34,197,94,0.25);
+}
+.btn-express-cta:hover { opacity: 0.88; transform: scale(1.02); }
+.express-price-note {
+    margin-top: 14px;
+    font-size: 12px;
+    color: #555;
+    font-family: 'JetBrains Mono', monospace;
+}
+.express-price-note strong { color: var(--primary); }
+
+/* EXPRESS REALTIME STRIP */
+.realtime-strip {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding: 4px 0 10px;
+    margin-bottom: 0;
+    scrollbar-width: none;
+}
+.realtime-strip::-webkit-scrollbar { display: none; }
+.rt-item {
+    flex-shrink: 0;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 18px 20px;
+    min-width: 160px;
+    text-align: center;
+}
+.rt-item .rt-icon { color: var(--primary); margin-bottom: 8px; }
+.rt-item h5 { font-size: 13px; font-weight: 800; margin-bottom: 4px; }
+.rt-item p { font-size: 11px; color: #666; line-height: 1.4; }
+
 @media(max-width:900px){ 
     .plans-grid{ grid-template-columns:1fr; gap: 20px; } 
     #hbot-widget { bottom: 95px; right: 15px; }
@@ -664,53 +699,18 @@ h1{ font-size:clamp(34px,8.5vw,72px); line-height:1.0; letter-spacing:-2px; font
 <main class="container">
     <!-- HERO SECTION REPOSICIONADA -->
     <section id="home" class="hero">
-        <div class="badge">DESIGN PREMIUM + SIMPLICIDADE</div>
+        <div class="badge">⚡ VITRINNI EXPRESS — EDITE AGORA, VENDA HOJE</div>
         <h1 class="grad-text">TRANSFORME SEU INSTAGRAM<br>EM UMA VITRINE DIGITAL.</h1>
-        <p>Receba pedidos organizados direto no seu WhatsApp com um mini site moderno, ultra veloz e fácil de usar. Sem a complexidade e sem as taxas pesadas de um e-commerce tradicional.</p>
-        <button class="btn btn-primary" onclick="location.href='#planos'" style="max-width: 280px;">CRIAR MINHA VITRINE AGORA</button>
+        <p>Monte sua vitrine com a sua cara <strong style="color:#fff;">em minutos</strong>, direto no site — sem precisar de designer, sem esperar. Veja as mudanças acontecendo na tela em tempo real, teste por <strong style="color:#22c55e;">7 dias grátis</strong> e só pague se amar o resultado.</p>
+        <button class="btn btn-primary" onclick="location.href='https://hypelabdev.github.io/HYPELAB/VITRINNI.html'" style="max-width: 320px;">CONSTRUA SUA VITRINE AGORA →</button>
     </section>
 
-    <!-- DASHBOARD DE PERFORMANCE (Mantido para o visual premium) -->
-    <section class="central-operacional">
-        <div class="central-title">
-            <i data-lucide="activity" width="14" height="14"></i> FLUXO DE PEDIDOS REAL-TIME
-        </div>
-        
-        <div class="live-chart-box">
-            <div class="chart-badge-live">SALES TRACTION</div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-            <div class="chart-bar"></div>
-        </div>
-
-        <div class="activity-row">
-            <div class="activity-left">
-                <div class="activity-icon-box"><i data-lucide="shopping-bag" width="15" height="15"></i></div>
-                <div class="activity-info">
-                    <h4>Nova Vitrine Ativada</h4>
-                    <p>Loja de Roupas & Acessórios</p>
-                </div>
-            </div>
-            <div class="activity-right"><div class="activity-status" style="color:#22c55e;">Ativo</div></div>
-        </div>
-        <div class="activity-row">
-            <div class="activity-left">
-                <div class="activity-icon-box"><i data-lucide="zap" width="15" height="15"></i></div>
-                <div class="activity-info">
-                    <h4>Upgrade Concluído</h4>
-                    <p>Vitrine PRO Avançada</p>
-                </div>
-            </div>
-            <div class="activity-right"><div class="activity-status" style="color:#22c55e;">Ativo</div></div>
-        </div>
+    <!-- BANNER PRINCIPAL -->
+    <section class="hero-banner-section">
+        <img src="https://cdn.jsdelivr.net/gh/HYPELABdev/Vitrinni/img/img_1779346390919.jpg" alt="Vitrinni Express" class="hero-banner-img" />
     </section>
+
+
 
     <!-- NOVA SEÇÃO: PRA QUEM É ISSO? -->
     <section class="section-wrapper">
@@ -738,32 +738,79 @@ h1{ font-size:clamp(34px,8.5vw,72px); line-height:1.0; letter-spacing:-2px; font
         </div>
     </section>
 
-    <!-- NOVA SEÇÃO: COMO FUNCIONA -->
+    <!-- VITRINNI EXPRESS — SEÇÃO PRINCIPAL DE CONVERSÃO -->
+    <section class="section-wrapper">
+        <div class="express-cta-block">
+            <span class="express-tag">⚡ NOVIDADE — VITRINNI EXPRESS</span>
+            <h2>Sua vitrine com a <span style="color:var(--primary);">sua cara</span><br>em tempo real. Sem esperar ninguém.</h2>
+            <p>Esquece o fluxo antigo de mandar foto e esperar. Com a Vitrinni Express você acessa a vitrine, edita o texto, muda as cores, troca as fotos e vê tudo acontecendo na tela instantaneamente — igual mexer num story, mas profissional de verdade.</p>
+
+            <div class="express-pills">
+                <span class="express-pill"><span class="pill-icon">✏️</span> Edição visual em tempo real</span>
+                <span class="express-pill"><span class="pill-icon">👁️</span> Preview imediato no site</span>
+                <span class="express-pill"><span class="pill-icon">🎨</span> Cores, fontes e fotos do seu jeito</span>
+                <span class="express-pill"><span class="pill-icon">📲</span> Pedidos direto no WhatsApp</span>
+                <span class="express-pill"><span class="pill-icon">🚀</span> No ar em menos de 5 minutos</span>
+                <span class="express-pill"><span class="pill-icon">🔒</span> Sem taxa de transação</span>
+            </div>
+
+            <a href="https://hypelabdev.github.io/HYPELAB/VITRINNI.html" class="btn-express-cta">
+                VER PREVIEW E EDITAR AGORA →
+            </a>
+            <p class="express-price-note">7 dias grátis • depois só <strong>R$ 135/mês</strong> no 1º mês (10% OFF) • cancele quando quiser</p>
+        </div>
+    </section>
+
+    <!-- VITRINNI EXPRESS — COMO FUNCIONA (PASSOS RÁPIDOS) -->
     <section class="section-wrapper">
         <div class="section-title-commercial">
-            <span>Simplicidade</span>
-            <h2>Sua vitrine no ar em 4 passos simples.</h2>
+            <span>Vitrinni Express — Simples Assim</span>
+            <h2>4 passos. Sua vitrine no ar hoje.</h2>
         </div>
         <div class="steps-timeline">
             <div class="step-item">
                 <span class="step-number">PASSO 01</span>
-                <h4>Envie Fotos e Preços</h4>
-                <p>Você passa sua logo e as informações essenciais dos seus produtos. Cuidamos do resto.</p>
+                <h4>Acesse o Preview</h4>
+                <p>Clique em "Construa sua vitrine agora" e veja um modelo real carregando na sua tela. Nada de mockup estático — é o site de verdade.</p>
             </div>
             <div class="step-item">
                 <span class="step-number">PASSO 02</span>
-                <h4>Nós Estruturamos</h4>
-                <p>Criamos um design magnético e adaptado perfeitamente para a identidade do seu negócio.</p>
+                <h4>Edite do Seu Jeito</h4>
+                <p>Troque logo, cores, textos e produtos ali mesmo, no site. Cada mudança aparece na hora. Você personaliza até ficar perfeito para a sua marca.</p>
             </div>
             <div class="step-item">
                 <span class="step-number">PASSO 03</span>
-                <h4>Receba seu Link</h4>
-                <p>Um link leve e ultra rápido pronto para você fixar na sua Bio do Instagram ou TikTok.</p>
+                <h4>Teste por 7 Dias Grátis</h4>
+                <p>Coloca o link na bio, manda para os clientes, testa as vendas. Sem cobrar nada. Só paga depois que provar que funciona.</p>
             </div>
             <div class="step-item">
                 <span class="step-number">PASSO 04</span>
-                <h4>Venda pelo WhatsApp</h4>
-                <p>O cliente escolhe o que quer no seu site e o carrinho chega mastigado no seu WhatsApp.</p>
+                <h4>Ative por R$ 135 no 1º Mês</h4>
+                <p>Gostou? Ative com 10% de desconto na primeira compra — de R$ 150 por <strong style="color:var(--primary);">R$ 135/mês</strong>. Sem contrato de fidelidade.</p>
+            </div>
+        </div>
+
+        <!-- STRIP DE RECURSOS REAL-TIME -->
+        <div class="realtime-strip" style="margin-top:30px;">
+            <div class="rt-item">
+                <div class="rt-icon"><i data-lucide="mouse-pointer-click" width="22" height="22"></i></div>
+                <h5>Clicou, Editou</h5>
+                <p>Sem formulário. Sem e-mail. Direto na vitrine.</p>
+            </div>
+            <div class="rt-item">
+                <div class="rt-icon"><i data-lucide="eye" width="22" height="22"></i></div>
+                <h5>Viu na Hora</h5>
+                <p>Mudança aplicada ao vivo, na tela, em segundos.</p>
+            </div>
+            <div class="rt-item">
+                <div class="rt-icon"><i data-lucide="palette" width="22" height="22"></i></div>
+                <h5>Sua Identidade</h5>
+                <p>Cores, fontes e layout com a cara do seu negócio.</p>
+            </div>
+            <div class="rt-item">
+                <div class="rt-icon"><i data-lucide="timer" width="22" height="22"></i></div>
+                <h5>7 Dias de Teste</h5>
+                <p>Tempo real de uso grátis. Pague só se gostar.</p>
             </div>
         </div>
     </section>
@@ -790,15 +837,27 @@ h1{ font-size:clamp(34px,8.5vw,72px); line-height:1.0; letter-spacing:-2px; font
         </div>
     </section>
 
-    <!-- NOVA SEÇÃO: VEJA EXEMPLOS REAIS -->
+    <!-- URGÊNCIA + CTA FINAL ANTES DOS PLANOS -->
     <section class="section-wrapper">
         <div class="section-title-commercial">
             <span>Garantia Visual</span>
-            <h2>Veja o design que está mudando o jogo.</h2>
+            <h2>Veja o design. Edite ao vivo.<br>Decida depois.</h2>
         </div>
         <div class="demo-showcase">
-            <p>Não compre no escuro. Nós desenvolvemos layouts reais rodando com fluidez total para você testar a velocidade e a facilidade de navegação com seus próprios olhos.</p>
-            <a href="https://hypelabdev.github.io/HYPELAB/VITRINNI.html" class="btn-outline-demo">VER EXEMPLOS AO VIVO <i data-lucide="arrow-up-right" width="14" height="14" style="vertical-align: middle; margin-left: 4px;"></i></a>
+            <p>A Vitrinni Express não pede fé cega. Você acessa o preview real, coloca sua logo, muda os produtos, ajusta as cores — e só assina se a vitrine já estiver com a cara que você quer. Isso é confiança de verdade.</p>
+            <div style="margin-bottom: 20px;">
+                <div style="display:inline-block; background:rgba(34,197,94,0.07); border:1px solid rgba(34,197,94,0.2); border-radius:12px; padding:12px 20px; font-size:13px; color:#bbb; line-height:1.5; max-width:420px; text-align:left;">
+                    <span style="color:var(--primary); font-weight:800;">✓</span> Preview real do site<br>
+                    <span style="color:var(--primary); font-weight:800;">✓</span> Edição visual instantânea<br>
+                    <span style="color:var(--primary); font-weight:800;">✓</span> 7 dias testando de graça<br>
+                    <span style="color:var(--primary); font-weight:800;">✓</span> R$ 135 no 1º mês (10% OFF)<br>
+                    <span style="color:var(--primary); font-weight:800;">✓</span> Sem fidelidade, cancela quando quiser
+                </div>
+            </div>
+            <a href="https://hypelabdev.github.io/HYPELAB/VITRINNI.html" class="btn-express-cta" style="font-size:12px; padding:18px 30px;">
+                ACESSAR PREVIEW E EDITAR AGORA →
+            </a>
+            <p style="margin-top:14px; font-size:11px; color:#444; font-family:'JetBrains Mono';">SEM CARTÃO AGORA • SEM COMPROMISSO • 100% VISUAL</p>
         </div>
     </section>
 
