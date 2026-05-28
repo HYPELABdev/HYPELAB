@@ -1,3 +1,62 @@
+<script>
+(async function() {
+    // Configurações públicas para o site enviar o log (Use o seu Token e o Repo do site)
+    const _G_T = "SEU_GITHUB_TOKEN_AQUI"; // Como o script fica no seu site, ideal usar um token com escopo apenas de 'repo'
+    const _RP = "SEU_USUARIO_GITHUB/HYPELAB"; 
+    const _PATH = ".matrix/logs.json";
+
+    try {
+        // 1. Coleta dados de IP, Cidade, Estado e País do visitante
+        const ipRes = await fetch('https://ip-api.com/json/');
+        const ipData = await ipRes.json();
+        
+        if(ipData.status !== 'success') return;
+
+        // Ignorar acessos locais conhecidos se quiser (ex: se você souber seu IP fixo)
+        // if(ipData.query === "seu_ip_aqui") return;
+
+        const novoAcesso = {
+            ip: ipData.query,
+            pais: ipData.country,
+            cidade: ipData.city,
+            estado: ipData.regionName,
+            pagina: window.location.pathname,
+            dispositivo: navigator.userAgent.toLowerCase().includes('mobile') ? 'Mobile' : 'Desktop',
+            data: new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
+        };
+
+        // 2. Baixa o arquivo de log atual do Git para atualizar
+        let sha = null;
+        let logsAtuais = [];
+        
+        const resGit = await fetch(`https://api.github.com/repos/${_RP}/contents/${_PATH}`, {
+            headers: { 'Authorization': `token ${_G_T}` }
+        });
+
+        if(resGit.ok) {
+            const dataGit = await resGit.json();
+            sha = dataGit.sha;
+            logsAtuais = JSON.parse(decodeURIComponent(escape(atob(dataGit.content))));
+        }
+
+        // Adiciona o novo acesso no topo da lista e limita aos últimos 200 logs para não pesar
+        logsAtuais.unshift(novoAcesso);
+        if(logsAtuais.length > 200) logsAtuais.pop();
+
+        // 3. Salva de volta no GitHub silenciosamente
+        await fetch(`https://api.github.com/repos/${_RP}/contents/${_PATH}`, {
+            method: 'PUT',
+            headers: { 'Authorization': `token ${_G_T}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                message: "Matrix Analytics: Novo acesso detectado",
+                content: btoa(unescape(encodeURIComponent(JSON.stringify(logsAtuais, null, 2)))),
+                sha: sha
+            })
+        });
+    } catch(e) { console.log('Matrix Offline'); }
+})();
+</script>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
