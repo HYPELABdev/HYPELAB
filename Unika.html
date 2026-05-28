@@ -1,10 +1,1059 @@
+<script>(function(){document.oncontextmenu=()=>false;})();</script>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<title>VITRINNI — HYPELAB CORE</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+    --primary:#22c55e;
+    --primary-glow:rgba(34,197,94,.15);
+    --bg:#050505;
+    --card-bg:rgba(12,12,12,.6);
+    --border:rgba(255,255,255,.05);
+    --border-hover:rgba(34,197,94,.3);
+    --text-muted:#8e8e93;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
+}
+
+body{
+    background:var(--bg);
+    color:#fff;
+    font-family:'Plus Jakarta Sans',sans-serif;
+    overflow-x:hidden;
+    min-height:100vh;
+    position:relative;
+    padding-bottom: 180px; 
+}
+
+body::before{
+    content:'';
+    position:fixed;
+    inset:0;
+    background:radial-gradient(circle at 50% -20%, #16351f 0%, #050505 70%);
+    z-index:-1;
+}
+
+/* NAV */
+.nav-container{
+    max-width:1200px;
+    margin:0 auto;
+    padding:30px 20px 0;
+}
+
+.back-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    color:var(--text-muted);
+    text-decoration:none;
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:2px;
+    padding:12px 22px;
+    border-radius:100px;
+    background:rgba(255,255,255,.03);
+    border:1px solid var(--border);
+    transition:.3s ease;
+    text-transform:uppercase;
+}
+
+.back-btn::before{
+    content:'←';
+    font-size:14px;
+}
+
+.back-btn:hover{
+    color:#fff;
+    border-color:var(--primary);
+    background:var(--primary-glow);
+    transform:translateX(-4px);
+}
+
+/* HEADER */
+header{
+    padding:40px 20px 30px;
+    text-align:center;
+}
+
+.logo-label{
+    font-family:'JetBrains Mono',monospace;
+    color:var(--primary);
+    font-size:11px;
+    letter-spacing:6px;
+    text-transform:uppercase;
+    margin-bottom:16px;
+    display:block;
+    font-weight:700;
+}
+
+h1{
+    font-size:clamp(34px,6vw,58px);
+    font-weight:800;
+    letter-spacing:-2px;
+    background:linear-gradient(to bottom,#fff 40%,#919191 100%);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.subtitle{
+    max-width:700px;
+    margin:20px auto 0;
+    color:var(--text-muted);
+    line-height:1.7;
+    font-size:15px;
+}
+
+/* TABS SYSTEM */
+.tabs-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin: 20px auto 40px;
+    max-width: 800px;
+    padding: 0 20px;
+}
+
+.tab-btn {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 14px 20px;
+    border-radius: 14px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(.15,.85,.45,1);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    flex: 1;
+    position: relative;
+}
+
+.tab-btn span {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    opacity: 0.5;
+    font-weight: 400;
+    text-align: center;
+}
+
+.tab-btn .tab-badge-new {
+    position: absolute;
+    top: -8px;
+    right: 10px;
+    background: var(--primary);
+    color: #000;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    font-weight: 800;
+    padding: 2px 6px;
+    border-radius: 4px;
+    box-shadow: 0 0 10px var(--primary);
+    animation: dotPulse 1s infinite;
+}
+
+.tab-btn:hover {
+    color: #fff;
+    border-color: rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.05);
+}
+
+.tab-btn.active {
+    color: #fff;
+    background: var(--primary-glow);
+    border-color: var(--primary);
+    box-shadow: 0 0 20px rgba(34,197,94,0.1);
+}
+
+/* CARDS GRID */
+.grid-models{
+    display:none;
+    grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
+    gap:30px;
+    max-width:1200px;
+    margin:0 auto;
+    padding:0 20px 80px;
+}
+
+.grid-models.active-grid {
+    display: grid;
+}
+
+.model-card{
+    background:var(--card-bg);
+    border:1px solid var(--border);
+    border-radius:24px;
+    padding:20px;
+    transition:.45s cubic-bezier(.15,.85,.45,1);
+    backdrop-filter:blur(20px);
+    overflow:hidden;
+    position:relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.model-card::before{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:linear-gradient(145deg, rgba(255,255,255,.03), transparent 40%);
+    pointer-events:none;
+}
+
+.model-card:hover{
+    border-color:var(--border-hover);
+    transform:translateY(-8px) scale(1.01);
+    box-shadow: 0 30px 60px rgba(0,0,0,.6), 0 0 40px rgba(34,197,94,.03);
+}
+
+.badge-hot {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: linear-gradient(135deg, #ea580c, #f97316);
+    color: #fff;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 50px;
+    letter-spacing: 1px;
+    z-index: 10;
+    box-shadow: 0 0 15px rgba(249, 115, 22, 0.4);
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.badge-upgrade {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: linear-gradient(135deg, #15803d, #22c55e);
+    color: #fff;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 50px;
+    letter-spacing: 1px;
+    z-index: 10;
+    box-shadow: 0 0 15px rgba(34, 197, 94, 0.4);
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.badge-software {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    color: #fff;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 50px;
+    letter-spacing: 1px;
+    z-index: 10;
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+/* CADEADO SOFT CURIOSIDADE */
+.model-card.soft-locked {
+    position: relative;
+}
+
+.soft-lock-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(5, 5, 5, 0.15);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    z-index: 20;
+    border-radius: 24px;
+    transition: background 0.3s ease;
+}
+
+.model-card.soft-locked:hover .soft-lock-overlay {
+    background: rgba(5, 5, 5, 0.25);
+}
+
+.soft-lock-badge {
+    background: rgba(0, 0, 0, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 10px 20px;
+    border-radius: 100px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+
+.soft-lock-icon {
+    font-size: 14px;
+    animation: lockPulse 2s infinite ease-in-out;
+}
+
+.soft-lock-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #e2e8f0;
+}
+
+.model-card.locked {
+    opacity: 0.3;
+    cursor: not-allowed;
+    border-style: dashed;
+}
+
+.locked-screen {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    z-index: 5;
+}
+
+.lock-icon { font-size: 24px; }
+.lock-text { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 2px; color: var(--text-muted); }
+
+.model-thumb{
+    width:100%;
+    height:220px;
+    border-radius:18px;
+    overflow:hidden;
+    position:relative;
+    margin-bottom:24px;
+    border:1px solid var(--border);
+    background:#090909;
+}
+
+.model-thumb img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center top;
+    transition:1s cubic-bezier(.15,.85,.45,1);
+    opacity:.88;
+}
+
+.model-card:hover .model-thumb img{
+    transform:scale(1.08);
+    opacity:1;
+}
+
+.thumb-overlay{
+    position:absolute;
+    inset:0;
+    background:linear-gradient(to top, rgba(0,0,0,.9), transparent 50%);
+    display:flex;
+    align-items:flex-end;
+    padding:15px;
+}
+
+.thumb-label{
+    font-family:'JetBrains Mono',monospace;
+    font-size:10px;
+    color:var(--primary);
+    letter-spacing:2px;
+    text-transform:uppercase;
+    background:rgba(0,0,0,.75);
+    padding:5px 10px;
+    border-radius:8px;
+    border:1px solid rgba(34,197,94,.2);
+}
+
+.model-info h3{
+    font-size:20px;
+    margin-bottom:12px;
+    font-weight:700;
+    letter-spacing:-.5px;
+}
+
+.model-info p{
+    color:var(--text-muted);
+    line-height:1.7;
+    font-size:14px;
+    margin-bottom:24px;
+}
+
+.btn-preview{
+    width:100%;
+    background:#fff;
+    color:#000;
+    border:none;
+    padding:16px;
+    border-radius:14px;
+    font-weight:800;
+    cursor:pointer;
+    transition:.3s ease;
+    text-transform:uppercase;
+    font-size:12px;
+    letter-spacing:1px;
+    margin-top:auto;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+}
+
+.btn-preview:hover{
+    background:var(--primary);
+    color: #fff;
+    transform:translateY(-2px);
+    box-shadow:0 15px 30px rgba(34,197,94,.25);
+}
+
+/* BOTÃO PREMIUM DO WHATSAPP COM SEGREDO INTERNO */
+.btn-whatsapp-software {
+    background: #22c55e;
+    color: #000;
+}
+
+.btn-whatsapp-software:hover {
+    background: #15803d;
+    color: #fff;
+    box-shadow:0 15px 30px rgba(34,197,94,.4);
+}
+
+.btn-preview.btn-soon {
+    background: rgba(255,255,255,0.05);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    cursor: not-allowed;
+}
+
+/* PREVIEW MODAL */
+.preview-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(3,3,3,.85);
+    backdrop-filter:blur(20px);
+    display:none;
+    z-index:10000;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:30px 20px;
+    opacity:0;
+    transition:opacity .4s ease;
+}
+
+.preview-overlay.active{ display:flex; opacity:1; }
+.preview-header{ width:100%; max-width:1200px; display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; }
+.preview-container{ width:100%; max-width:1200px; height:85vh; background:#fff; border-radius:24px; overflow:hidden; position:relative; border:1px solid rgba(255,255,255,.08); box-shadow:0 50px 100px rgba(0,0,0,.9); }
+#previewIframe{ width:100%; height:100%; border:none; opacity:0; transition:.5s ease; }
+#previewIframe.loaded{ opacity:1; }
+.close-preview{ background:#fff; border:none; color:#000; padding:12px 28px; border-radius:100px; font-weight:800; font-size:11px; cursor:pointer; text-transform:uppercase; letter-spacing:1px; transition:.3s ease; }
+.close-preview:hover{ background:var(--primary); color: #fff; }
+
+.loader-bar{ position:absolute; top:0; left:0; width:0%; height:3px; background:var(--primary); z-index:100; transition:width .4s ease; box-shadow:0 0 10px var(--primary); }
+.loader-text{ position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-family:'JetBrains Mono',monospace; color:#fff; font-size:12px; letter-spacing:3px; opacity:.6; animation:pulse 1.5s infinite ease-in-out; }
+@keyframes pulse{ 0%,100%{opacity:.3} 50%{opacity:.8} }
+
+/* HUD INTELEGENTE DO H-BOT */
+.jarvis-hud-wrapper {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    z-index: 99999;
+    max-width: 540px; 
+    width: calc(100% - 60px);
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.5s cubic-bezier(0.15, 0.85, 0.45, 1);
+    pointer-events: none;
+}
+
+.jarvis-hud-wrapper.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.jarvis-avatar-box {
+    position: relative;
+    width: 75px;
+    height: 75px;
+    flex-shrink: 0;
+}
+
+.jarvis-avatar {
+    width: 100%;
+    height: 100%;
+    background: #090909;
+    background-image: url('https://cdn.jsdelivr.net/gh/HYPELABdev/Vitrinni/img/img_1778860621823.jpg');
+    background-size: cover;
+    background-position: center;
+    border: 2px solid var(--primary);
+    border-radius: 50%;
+    box-shadow: 0 0 20px rgba(34,197,94,0.4);
+    z-index: 2;
+    position: relative;
+    animation: jarvisFloat 3s ease-in-out infinite;
+}
+
+/* ANIMAÇÃO ACELERADA PRO GATILHO DA LICENÇA */
+.jarvis-avatar.talking-fast {
+    animation: jarvisFloat 0.8s ease-in-out infinite, jarvisFastPulse 0.4s ease-in-out infinite alternate;
+    border-color: #fff;
+    box-shadow: 0 0 30px #fff;
+}
+
+.jarvis-radar {
+    position: absolute;
+    inset: -4px;
+    border: 2px solid var(--primary);
+    border-radius: 50%;
+    opacity: 0;
+    z-index: 1;
+    animation: jarvisPulse 2s cubic-bezier(0.1, 0.8, 0.3, 1) infinite;
+}
+
+.jarvis-box {
+    background: rgba(4, 10, 6, 0.93);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    border-radius: 14px;
+    padding: 16px 20px;
+    flex-grow: 1;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.8), inset 0 0 15px rgba(34,197,94,0.05);
+    position: relative;
+}
+
+.jarvis-box.highlight-box {
+    border-color: #fff;
+    box-shadow: 0 20px 50px rgba(255,255,255,0.15);
+}
+
+.jarvis-box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 8px;
+    height: 8px;
+    border-top: 2px solid var(--primary);
+    border-left: 2px solid var(--primary);
+}
+
+.jarvis-box::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 8px;
+    height: 8px;
+    border-bottom: 2px solid var(--primary);
+    border-right: 2px solid var(--primary);
+}
+
+.jarvis-header {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.jarvis-blink-dot {
+    width: 5px;
+    height: 5px;
+    background: var(--primary);
+    border-radius: 50%;
+    animation: dotPulse 1s infinite;
+}
+
+.jarvis-text {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #e2e8f0;
+    font-weight: 500;
+}
+
+@keyframes jarvisFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+@keyframes jarvisPulse { 0% { transform: scale(1); opacity: 0.6; } 100% { transform: scale(1.3); opacity: 0; } }
+@keyframes jarvisFastPulse { 0% { box-shadow: 0 0 15px rgba(255,255,255,0.2); } 100% { box-shadow: 0 0 35px var(--primary); } }
+@keyframes dotPulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+@keyframes lockPulse { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.15); opacity: 1; } }
+
+/* MOBILE */
+@media(max-width:768px){
+    .grid-models{ grid-template-columns:1fr; padding-bottom:40px; }
+    
+    /* 🚀 REFINAMENTO MOBILE DO PREVIEW: Ocupa a tela inteira sem esmagar */
+    .preview-overlay {
+        padding: 0 !important;
+    }
+    .preview-header {
+        width: 100% !important;
+        padding: 12px 20px !important;
+        margin-bottom: 0 !important;
+        background: #050505;
+        border-bottom: 1px solid rgba(255,255,255,.05);
+    }
+    .preview-container {
+        width: 100% !important;
+        height: calc(100vh - 55px) !important;
+        border-radius: 0 !important;
+        border: none !important;
+    }
+    
+    .preview-header span{ display:none; }
+    .tabs-container { gap: 10px; flex-wrap: wrap; }
+    .tab-btn { padding: 12px 14px; font-size: 12px; }
+    .jarvis-hud-wrapper { bottom: 15px; right: 15px; width: calc(100% - 30px); gap: 10px; }
+    .jarvis-avatar-box { width: 60px; height: 60px; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="nav-container">
+    <a href="https://hypelabofc.site" class="back-btn">Voltar ao Núcleo</a>
+</div>
+
+<header>
+    <span class="logo-label">HYPELAB — LOJAS ONLINE NA HORA</span>
+    <h1>Ambiente de Modelos</h1>
+    <p class="subtitle">SELECIONE O MODELO QUE DESEJAR VISUALIZAR E EDITE EM TEMPO REAL CLICANDO NA ENGRENAGEM DO PREVIEW DA VITRINE EXPRESS 🚀</p>
+</header>
+
+<div class="tabs-container">
+    <button class="tab-btn active" onclick="switchTab('catalogos')">
+        Vitrine Express
+        <span>Menu Lateral de Produtos</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('vitrinnis')">
+        Vitrinnis
+        <span>MODELOS COM PAINEL EDITOR PRO</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('softwares')">
+        <div class="tab-badge-new">NOVO</div>
+        Softwares
+        <span>Sistemas e Bots Autônomos</span>
+    </button>
+</div>
+
+<div id="tab-catalogos" class="grid-models active-grid">
+    <div class="model-card">
+        <span class="badge-hot">⚡ MAIS VENDIDO </span>
+        <div class="model-thumb">
+            <img src="https://cdn.jsdelivr.net/gh/HYPELABdev/Vitrinni/img/img_1779745073212.jpg" alt="Preview Catálogo">
+            <div class="thumb-overlay">
+                <span class="thumb-label">EDITE AO VIVO 🚀</span>
+            </div>
+        </div>
+        <div class="model-info">
+            <h3>VITRINE EXPRESS</h3>
+            <p>Sistema ágil e simplificado com menu lateral nativo para organizar e editar seus produtos e visual da lojinha. Ideal para automação rápida de pedidos e alta conversão direta.</p>
+            <button class="btn-preview" onclick="openPreview('https://catalogo.hypelabofc.site/levelup1')">Visualizar Demo</button>
+        </div>
+    </div>
+
+    <div class="model-card locked">
+        <div class="locked-screen">
+            <span class="lock-icon">🔒</span>
+            <span class="lock-text">EM DESENVOLVIMENTO</span>
+        </div>
+        <div class="model-thumb">
+            <img src="https://cdn.jsdelivr.net/gh/HYPELABdev/Vitrinni/img/img_1779745073212.jpg" alt="Locked">
+        </div>
+        <div class="model-info">
+            <h3>EM BREVE</h3>
+            <p>Mais um sistema estruturado de alta conversão está sendo acoplado ao ecossistema.</p>
+            <button class="btn-preview" disabled>Bloqueado</button>
+        </div>
+    </div>
+</div>
+
+<div id="tab-vitrinnis" class="grid-models">
+    <div class="model-card locked">
+        <div class="locked-screen">
+            <span class="lock-icon">🔒</span>
+            <span class="lock-text">REQUER PLANO PREMIUM</span>
+        </div>
+        <div class="model-thumb">
+            <img src="https://cdn.jsdelivr.net/gh/HYPELABdev/Vitrinni/img/img_1778970422609.jpg" alt="Preview Moda">
+            <div class="thumb-overlay">
+                <span class="thumb-label">MODEL_MODA_V1</span>
+            </div>
+        </div>
+        <div class="model-info">
+            <h3>MODELO VENDAS MODA</h3>
+            <p>Estrutura premium focada em branding, exclusividade visual e experiência sofisticada.</p>
+            <button class="btn-preview" onclick="openPreview('https://hypelabdev.github.io/Vitrinni/MODA.html?id=moda')">Visualizar Demo</button>
+        </div>
+    </div>
+
+    <div class="model-card locked">
+        <div class="locked-screen">
+            <span class="lock-icon">🔒</span>
+            <span class="lock-text">REQUER PLANO PREMIUM</span>
+        </div>
+        <div class="model-thumb">
+            <img src="https://cdn.jsdelivr.net/gh/HYPELABdev/Vitrinni/img/img_1778970422609.jpg" alt="Preview Social">
+            <div class="thumb-overlay">
+                <span class="thumb-label">MODEL_SOCIAL_V1</span>
+            </div>
+        </div>
+        <div class="model-info">
+            <h3>MODELO VENDAS SEGUIDORES</h3>
+            <p>Interface moderna para nichos sociais, engajamento e captação de clientes digitais.</p>
+            <button class="btn-preview" onclick="openPreview('https://hypelabdev.github.io/Vitrinni/SEGUIDOR.html?id=levelup')">Visualizar Demo</button>
+        </div>
+    </div>
+
+    <div class="model-card locked">
+        <div class="locked-screen">
+            <span class="lock-icon">🔒</span>
+            <span class="lock-text">EM DESENVOLVIMENTO</span>
+        </div>
+        <div class="model-thumb">
+            <img src="https://cdn.jsdelivr.net/gh/HYPELABdev/Vitrinni/img/img_1778970422609.jpg" alt="Locked">
+        </div>
+        <div class="model-info">
+            <h3>EM BREVE</h3>
+            <p>Mais um sistema estruturado de alta conversão está sendo acoplado ao ecossistema.</p>
+            <button class="btn-preview" disabled>Bloqueado</button>
+        </div>
+    </div>
+</div>
+
+<div id="tab-softwares" class="grid-models">
+    <div class="model-card">
+        <span class="badge-software">🤖 INCORPORÁVEL</span>
+        <div class="model-thumb">
+            <img src="https://cdn.jsdelivr.net/gh/HYPELABdev/Vitrinni/img/img_1778860621823.jpg" alt="H-Bot Software" style="object-fit: contain; background: #0c0c0c; padding: 10px;">
+            <div class="thumb-overlay">
+                <span class="thumb-label">SOFT_HBOT_V4</span>
+            </div>
+        </div>
+        <div class="model-info">
+            <h3>H-BOT ASSISTENTE VIRTUAL EDITÁVEL</h3>
+            <p>Licença do nosso software proprietário de atendimento. Um assistente holográfico inteligente e autônomo em JS/CSS, totalmente customizável para suporte, retenção de leads e gamificação de páginas comerciais.</p>
+            
+            <button class="btn-preview btn-whatsapp-software" onclick="interceptLicencePurchase(event)">Adquirir Licença</button>
+        </div>
+    </div>
+
+    <div class="model-card soft-locked">
+        <div class="soft-lock-overlay">
+            <div class="soft-lock-badge">
+                <span class="soft-lock-icon">🎮</span>
+                <span class="soft-lock-text">COMPILANDO PROTOCOLO...</span>
+            </div>
+        </div>
+        <div class="model-thumb">
+            <img src="https://cdn.jsdelivr.net/gh/HYPELABdev/Vitrinni/img/img_1778970422609.jpg" alt="Locked Software">
+            <div class="thumb-overlay">
+                <span class="thumb-label">GAME_ADV_V1</span>
+            </div>
+        </div>
+        <div class="model-info">
+            <h3>SISTEMAS GAMIFICADOS (ADVERGAMES)</h3>
+            <p>Minigames interativos de altíssima fidelidade desenvolvidos sob medida em código nativo, projetados especificamente para prender a atenção psicológica do usuário e converter de forma viral através do entretenimento.</p>
+            <button class="btn-preview btn-soon" disabled>Em Breve</button>
+        </div>
+    </div>
+</div>
+
+<div id="previewOverlay" class="preview-overlay">
+    <div class="preview-header">
+        <span style="font-weight:700; color:var(--primary); font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:2px;">// AMBIENTE DE TESTE ATIVO</span>
+        <button class="close-preview" onclick="closePreview()">Fechar Preview</button>
+    </div>
+    <div class="preview-container">
+        <div id="loaderBar" class="loader-bar"></div>
+        <div id="loaderText" class="loader-text">ESTABELECENDO CONEXÃO...</div>
+        <iframe id="previewIframe"></iframe>
+    </div>
+</div>
+
+<div class="jarvis-hud-wrapper" id="jarvisWrapper">
+    <div class="jarvis-avatar-box">
+        <div class="jarvis-radar"></div>
+        <div class="jarvis-avatar" id="jarvisAvatarImg"></div>
+    </div>
+    <div class="jarvis-box" id="jarvisBoxContent">
+        <div class="jarvis-header">
+            <div class="jarvis-blink-dot"></div>
+            <span id="jarvisProtocol">H-BOT // STANDBY_</span>
+        </div>
+        <div class="jarvis-text" id="jarvisText"></div>
+    </div>
+</div>
+
 <script>
-(function(){
-    var _r = "==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".split('').reverse().join(''); 
-    document.open();
-    document.write(decodeURIComponent(escape(atob(_r))));
-    document.close();
-    document.oncontextmenu = () => false;
-    document.onkeydown = e => { if(e.keyCode==123 || (e.ctrlKey && e.shiftKey && e.keyCode==73)) return false; };
-})();
+const overlay = document.getElementById('previewOverlay');
+const iframe = document.getElementById('previewIframe');
+const loaderBar = document.getElementById('loaderBar');
+const loaderText = document.getElementById('loaderText');
+
+// CONFIGURAÇÃO: Seu Whatsapp real (Substitua mantendo o 55)
+const SEU_WHATSAPP = "5511949946730";
+
+// VARIÁVEIS DE CONTROLE DOS NOVOS GATILHOS
+let engagementTimer;
+let exitIntercepted = false;
+
+function switchTab(tabId) {
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.grid-models').forEach(grid => grid.classList.remove('active-grid'));
+    
+    event.currentTarget.classList.add('active');
+    document.getElementById(`tab-${tabId}`).classList.add('active-grid');
+
+    triggerJarvisSpeech(tabId);
+}
+
+/* 🚀 FUNÇÃO AUXILIAR GERAL DO H-BOT PARA RESPOSTAS DIRETAS */
+function triggerCustomJarvis(protocol, text, hasWAButton = false, waMsg = "") {
+    clearTimeout(typingTimeout);
+    clearTimeout(hideTimeout);
+
+    const wrapper = document.getElementById("jarvisWrapper");
+    const protocolField = document.getElementById("jarvisProtocol");
+    const textField = document.getElementById("jarvisText");
+    const avatar = document.getElementById("jarvisAvatarImg");
+    const box = document.getElementById("jarvisBoxContent");
+
+    avatar.classList.remove("talking-fast");
+    box.classList.remove("highlight-box");
+
+    protocolField.innerText = protocol;
+    textField.innerHTML = "";
+    wrapper.classList.add("active");
+
+    let charIndex = 0;
+    function type() {
+        if (charIndex < text.length) {
+            textField.innerHTML += text.charAt(charIndex);
+            charIndex++;
+            typingTimeout = setTimeout(type, 10);
+        } else {
+            if (hasWAButton) {
+                const encodedMsg = encodeURIComponent(waMsg);
+                textField.innerHTML += `<br><br><a href="https://wa.me/${SEU_WHATSAPP}?text=${encodedMsg}" target="_blank" class="btn-preview btn-whatsapp-software" style="margin-top:10px; padding:12px; font-size:11px; text-align:center; display:block; text-decoration:none; color:#000; font-weight:800; border-radius:8px;">🚀 Finalizar no WhatsApp</a>`;
+            } else {
+                hideTimeout = setTimeout(() => {
+                    wrapper.classList.remove("active");
+                }, 9000);
+            }
+        }
+    }
+    type();
+}
+
+function openPreview(url){
+    loaderBar.style.width = '0%';
+    loaderText.style.display = 'block';
+    iframe.classList.remove('loaded');
+    iframe.src = url;
+    overlay.style.display = 'flex';
+    setTimeout(()=>{
+        overlay.classList.add('active');
+        loaderBar.style.width = '70%';
+    },50);
+    document.body.style.overflow = 'hidden';
+
+    // RESET DE ESTADO DOS NOVOS GATILHOS
+    clearTimeout(engagementTimer);
+    exitIntercepted = false;
+
+    // GATILHO 1: Se for o catálogo, entrega a senha imediatamente de forma curta
+    if (url.includes('catalogo.hypelabofc.site') || url.includes('levelup1')) {
+        setTimeout(() => {
+            triggerCustomJarvis(
+                "H-BOT // ACESSO_EDITOR", 
+                "TESTE O CRIADOR DE SITES AGORA MESMO!! CLIQUE NA ENGRENAGEM NO TOPO ESQUERDO E COLOQUE A SENHA Hype420 com H maiúsculo, Veja como é rápido deixar a loja com a sua cara!"
+            );
+        }, 1900);
+
+        // GATILHO 2: Monitora 5 minutos (300.000ms) editando para soltar o cupom de 10%
+        engagementTimer = setTimeout(() => {
+            const msgCupom = "Olá! Ganhei o cupom de 10% de desconto do H-Bot após testar o editor do catálogo e quero fechar minha licença.";
+            triggerCustomJarvis(
+                "H-BOT // BÔNUS_ENGANJAMENTO", 
+                "Parabéns pelo foco! Você está criando sua loja há 5 minutos. Liberei 10% DE DESCONTO exclusivo para você colocar seu site no ar agora mesmo. Aproveite!", 
+                true, 
+                msgCupom
+            );
+            document.getElementById("jarvisAvatarImg").classList.add("talking-fast");
+        }, 300000); 
+    }
+}
+
+iframe.onload = function(){
+    loaderBar.style.width = '100%';
+    setTimeout(()=>{
+        loaderText.style.display = 'none';
+        iframe.classList.add('loaded');
+    },300);
+};
+
+function closePreview(){
+    // GATILHO 3: Interceptação de saída (Trava de segurança para conversão)
+    if (!exitIntercepted) {
+        exitIntercepted = true;
+        
+        const msgRetencao = "Olá! Estava editando minha Vitrine no ambiente demo e gostaria de finalizar o projeto com o suporte.";
+        triggerCustomJarvis(
+            "H-BOT // RETENÇÃO_CRÍTICA", 
+            "Atenção! Se você sair agora, vai perder todo o visual incrível que editou para sua loja. Garanta sua estrutura pronta agora e envie direto pro WhatsApp para finalizarmos!", 
+            true, 
+            msgRetencao
+        );
+
+        // Destaca o H-Bot na tela gerando urgência visual
+        document.getElementById("jarvisAvatarImg").classList.add("talking-fast");
+        document.getElementById("jarvisBoxContent").classList.add("highlight-box");
+        return; // Interrompe o fechamento da tela na primeira tentativa
+    }
+
+    // Se o cliente insistir e clicar em Fechar de novo, sai normalmente
+    clearTimeout(engagementTimer);
+    overlay.classList.remove('active');
+    setTimeout(()=>{
+        overlay.style.display = 'none';
+        iframe.src = '';
+        iframe.classList.remove('loaded');
+        document.getElementById("jarvisAvatarImg").classList.remove("talking-fast");
+        document.getElementById("jarvisBoxContent").classList.remove("highlight-box");
+        document.getElementById("jarvisWrapper").classList.remove("active");
+    },400);
+    document.body.style.overflow = 'auto';
+}
+
+document.addEventListener('keydown',(e)=>{
+    if(e.key === 'Escape' && overlay.classList.contains('active')) closePreview();
+});
+
+let typingTimeout;
+let hideTimeout;
+
+const jarvisDatabase = {
+    catalogos: {
+        protocol: "H-BOT // PROTOCOLO_CATALOG",
+        text: "Varredura efetuada! O Plano Vitrine Express (R$ 150/mês) é estruturado milimetricamente para quem está começando. Entrega automação ágil, menu fluido de alta retenção e ativação rápida de vendas."
+    },
+    vitrinnis: {
+        protocol: "H-BOT // PROTOCOLO_VITRINNI",
+        text: "Upgrade detectado! O Plano Vitrinnis (R$ 350/mês) foi desenvolvido para marcas que exigem autoridade extrema. Destrava designs ultra-premium com branding imersivo e personalização total."
+    },
+    softwares: {
+        protocol: "H-BOT // PROTOCOLO_SOFTWARE",
+        text: "Diretriz de expansão activa! Na aba Softwares, disponibilizamos sistemas independentes, scripts e inteligências integráveis (como eu mesmo!) para compra de licença definitiva e lucro direto."
+    }
+};
+
+function triggerJarvisSpeech(tabKey) {
+    clearTimeout(typingTimeout);
+    clearTimeout(hideTimeout);
+
+    const wrapper = document.getElementById("jarvisWrapper");
+    const protocolField = document.getElementById("jarvisProtocol");
+    const textField = document.getElementById("jarvisText");
+    const avatar = document.getElementById("jarvisAvatarImg");
+    const box = document.getElementById("jarvisBoxContent");
+
+    avatar.classList.remove("talking-fast");
+    box.classList.remove("highlight-box");
+
+    const data = jarvisDatabase[tabKey];
+
+    protocolField.innerText = data.protocol;
+    textField.innerHTML = "";
+    wrapper.classList.add("active");
+
+    let charIndex = 0;
+    function type() {
+        if (charIndex < data.text.length) {
+            textField.innerHTML += data.text.charAt(charIndex);
+            charIndex++;
+            typingTimeout = setTimeout(type, 12); 
+        } else {
+            hideTimeout = setTimeout(() => {
+                wrapper.classList.remove("active");
+            }, 6000); 
+        }
+    }
+    type();
+}
+
+function interceptLicencePurchase(event) {
+    event.preventDefault();
+    
+    clearTimeout(typingTimeout);
+    clearTimeout(hideTimeout);
+
+    const wrapper = document.getElementById("jarvisWrapper");
+    const protocolField = document.getElementById("jarvisProtocol");
+    const textField = document.getElementById("jarvisText");
+    const avatar = document.getElementById("jarvisAvatarImg");
+    const box = document.getElementById("jarvisBoxContent");
+
+    avatar.classList.add("talking-fast");
+    box.classList.add("highlight-box");
+    
+    wrapper.classList.add("active");
+    protocolField.innerText = "H-BOT // NEGOCIAÇÃO_DIRETA";
+    textField.innqerHTML = "";
+
+    const speechText = "Licen Apenas R$ 197 por mês por um assistente inteligente rodando 24h, retendo leads e aumentando conversões. Estou organizando seus arquivos, te aguardo no WhatsApp do meu desenvolvedor!";
+
+    let charIndex = 0;
+    function typeSpeech() {
+        if (charIndex < speechText.length) {
+            textField.innerHTML += speechText.charAt(charIndex);
+            charIndex++;
+            typingTimeout = setTimeout(typeSpeech, 10);
+        } else {
+            setTimeout(() => {
+                avatar.classList.remove("talking-fast");
+                box.classList.remove("highlight-box");
+                wrapper.classList.remove("active");
+                
+                const whatsappMessage = encodeURIComponent("Olá! Gostaria de adquirir a licença do H-BOT Assistente Virtual Editável para o meu site. Vi que o plano de licenciamento + SLA de suporte fica por apenas R$ 197,00/mês. Como posso iniciar a integração?");
+                window.open(`https://wa.me/${SEU_WHATSAPP}?text=${whatsappMessage}`, '_blank');
+            }, 1500);
+        }
+    }
+    typeSpeech();
+}
 </script>
+</body>
+</html>
