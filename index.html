@@ -545,7 +545,7 @@ function blobTap(){
   sendMsg('Oi BLOB! Me conta sobre a Hype Lab 👋');
 }
 
-/* ══════ ENVIO E IA (CORRIGIDO PARA VERCEL SERVERLESS) ══════ */
+/* ══════ ENVIO E IA ══════ */
 const inp=document.getElementById('chat-input');
 inp.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg()}});
 inp.addEventListener('input',()=>{inp.style.height='auto';inp.style.height=Math.min(inp.scrollHeight,88)+'px'});
@@ -562,7 +562,7 @@ async function sendMsg(preset){
   appendTyping();
 
   try{
-    // Rota local/Vercel que evita problemas de CORS no front-end
+    // Corrigido para bater na sua nova API interna hospedada na Vercel
     const res=await fetch('/api/chat',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
@@ -571,18 +571,13 @@ async function sendMsg(preset){
         messages:history
       })
     });
-    
     const data=await res.json();
-    if(data.error) throw new Error(data.error);
-
     let reply=data.content?.map(c=>c.text||'').join('')||'Tive um problema! Tenta de novo? 😅';
 
-    // extrai estado
     let detectedState='idle';
     const stateMatch=reply.match(/\[STATE:(\w+)\]/);
     if(stateMatch){detectedState=stateMatch[1];reply=reply.replace(/\[STATE:\w+\]/g,'').trim()}
 
-    // verifica captura
     const needsCapture=reply.includes('[CAPTURE_LEAD]');
     reply=reply.replace('[CAPTURE_LEAD]','').trim();
 
@@ -590,14 +585,12 @@ async function sendMsg(preset){
     setState(detectedState);
     history.push({role:'assistant',content:reply});
 
-    // formata
     const fmt=reply
       .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
       .replace(/\*(.*?)\*/g,'<em>$1</em>')
       .replace(/(https?:\/\/[^\s]+)/g,'<a href="$1" target="_blank">$1</a>')
       .replace(/\n/g,'<br>');
 
-    // quick replies contextuais
     let qrHTML='';
     const lower=reply.toLowerCase();
     if(lower.includes('express')&&lower.includes('premium')){
@@ -614,7 +607,6 @@ async function sendMsg(preset){
     if(needsCapture) setTimeout(showCaptureForm,400);
 
   }catch(err){
-    console.error(err);
     removeTyping();setState('alert');
     appendMsg('blob','Ops! Problema de conexão momentâneo 😅 Tenta novamente ou fala direto no <a href="https://wa.me/5511949946730" target="_blank">WhatsApp</a>!','alert');
   }
