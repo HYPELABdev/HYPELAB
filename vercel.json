@@ -1,7 +1,6 @@
 {
   "rewrites": [
     { "source": "/", "destination": "/index.html" },
-    { "source": "/api/chat", "destination": "/api/chat.js" }
+    { "source": "/api/chat", "destination": "/Blob/api/chat.js" }
   ]
 }
-
