@@ -1,4 +1,4 @@
-import { GoogleGenAI } from '@google/genai';
+const { GoogleGenAI } = require('@google/genai');
 
 // Inicializa a API do Gemini usando a variável da Vercel
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
@@ -20,7 +20,7 @@ export default async function handler(req, res) {
   try {
     const { messages } = req.body;
 
-    // 1. Prompt do seu Vendedor Dedicado (Instruções de Personalidade)
+    // Prompt do seu Vendedor Dedicado
     const systemInstruction = `
       Você é o BLOB, o agente oficial de vendas da Hype Lab.
       Seu objetivo é ser um vendedor extremamente simpático, direto ao ponto, moderno e focado em fechar negócios.
@@ -37,13 +37,13 @@ export default async function handler(req, res) {
       3. Suas respostas devem ser curtas e escaneáveis no celular. Nunca mande textões.
     `;
 
-    // 2. Formata o histórico de mensagens para o padrão que o Gemini entende
+    // Formata o histórico de mensagens para o padrão que o Gemini entende
     const contents = messages.map(msg => ({
       role: msg.role === 'assistant' ? 'model' : 'user',
       parts: [{ text: msg.content }]
     }));
 
-    // 3. Chama o modelo Gemini 1.5 Flash
+    // Chama o modelo Gemini 1.5 Flash (Super rápido)
     const response = await ai.models.generateContent({
       model: 'gemini-1.5-flash',
       contents: contents,
