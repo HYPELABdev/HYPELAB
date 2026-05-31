@@ -1,10 +1,10 @@
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 
-// Inicializa a API clássica com a chave da Vercel
+// Inicializa a API com a chave cadastrada nas variáveis de ambiente da Vercel
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-export default async function handler(req, res) {
-  // Libera o CORS para o site funcionar
+module.exports = async (req, res) => {
+  // Configuração de CORS para permitir a comunicação com o front-end
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -21,17 +21,16 @@ export default async function handler(req, res) {
     const { messages, system } = req.body;
 
     if (!messages || !Array.isArray(messages)) {
-      return res.status(400).json({ error: 'Mensagens ausentes ou inválidas' });
+      return res.status(400).json({ error: 'Histórico de mensagens inválido.' });
     }
 
-    // Instancia o modelo clássico Gemini 1.5 Flash
+    // Configura o modelo com as instruções do vendedor passadas pelo index.html
     const model = genAI.getGenerativeModel({ 
       model: 'gemini-1.5-flash',
       systemInstruction: system || 'Você é o BLOB, agente da Hype Lab.'
     });
 
-    // Formata o histórico exatamente como a biblioteca clássica exige
-    // Ignora mensagens de sistema antigas que possam estar no meio
+    // Formata o histórico de mensagens para o padrão do Gemini (user / model)
     const chatHistory = messages
       .filter(msg => msg.role === 'user' || msg.role === 'assistant')
       .map(msg => ({
@@ -39,30 +38,30 @@ export default async function handler(req, res) {
         parts: [{ text: msg.content }]
       }));
 
-    // Remove a última mensagem para iniciar o chat e enviar ela como o novo prompt
+    // Remove a última mensagem enviada para usá-la como o gatilho atual do chat
     const lastMessage = chatHistory.pop();
     
     if (!lastMessage) {
-      return res.status(400).json({ error: 'Nenhuma mensagem para enviar.' });
+      return res.status(400).json({ error: 'Nenhuma mensagem encontrada.' });
     }
 
-    // Inicia a conversa com o histórico restante
+    // Inicia a conversa mantendo a memória do chat anterior
     const chat = model.startChat({
       history: chatHistory
     });
 
-    // Envia a última mensagem do usuário
+    // Envia a mensagem e aguarda a resposta do Gemini
     const result = await chat.sendMessage(lastMessage.parts[0].text);
     const response = await result.response;
     const replyText = response.text();
 
-    // Devolve o formato exato que o seu index.html precisa: data.content[0].text
+    // Retorna exatamente a estrutura de objeto que o seu index.html precisa ler
     return res.status(200).json({
       content: [{ text: replyText }]
     });
 
   } catch (error) {
-    console.error("Erro interno no back-end:", error);
+    console.error("Erro interno no servidor da Vercel:", error);
     return res.status(500).json({ error: 'Erro ao processar IA.', details: error.message });
   }
-}
+};
