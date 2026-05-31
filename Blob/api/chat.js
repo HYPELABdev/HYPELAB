@@ -1,8 +1,10 @@
 import { GoogleGenAI } from '@google/genai';
 
+// Inicializa a API do Gemini com a sua chave salva na Vercel
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 export default async function handler(req, res) {
+  // Configuração de CORS para permitir que o site acesse a API
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -16,43 +18,40 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { messages } = req.body;
+    // Pega as mensagens e o prompt do sistema vindos do index.html
+    const { messages, system } = req.body;
 
-    const systemInstruction = `
-      Você é o BLOB, o agente oficial de vendas da Hype Lab.
-      Seu objetivo é ser um vendedor extremamente simpático, direto ao ponto, moderno e focado em fechar negócios.
-      
-      A Hype Lab cria lojas digitais profissionais que o cliente pode editar em tempo real, sem precisar de técnico e sem complicação.
-      
-      Nossos Planos Principais:
-      - Lojinha Express: R$ 150 (Ideal para quem está começando rápido).
-      - Lojinha Premium: R$ 450 (Completa, com mais recursos e design exclusivo).
-      
-      Regras de comportamento:
-      1. Use emojis moderadamente (especialmente a bolinha verde 🟢).
-      2. Seja prestativo, tire dúvidas sobre os planos, e conduza o cliente para fechar o plano ou clicar no botão do WhatsApp.
-      3. Suas respostas devem ser curtas e escaneáveis no celular. Nunca mande textões.
-    `;
+    if (!messages || !Array.isArray(messages)) {
+      return res.status(400).json({ error: 'Histórico de mensagens inválido ou ausente.' });
+    }
 
-    const contents = messages.map(msg => ({
-      role: msg.role === 'assistant' ? 'model' : 'user',
-      parts: [{ text: msg.content }]
-    }));
+    // Filtra e formata o histórico para o formato exato exigido pelo Gemini
+    const contents = messages
+      .filter(msg => msg.role === 'user' || msg.role === 'assistant')
+      .map(msg => ({
+        role: msg.role === 'assistant' ? 'model' : 'user',
+        parts: [{ text: msg.content }]
+      }));
 
+    // Executa a chamada do Gemini 1.5 Flash
     const response = await ai.models.generateContent({
       model: 'gemini-1.5-flash',
       contents: contents,
       config: {
-        systemInstruction: systemInstruction,
+        systemInstruction: system || 'Você é o BLOB, agente da Hype Lab.',
         temperature: 0.7,
       }
     });
 
-    const botReply = response.text || "🟢 Opa! Pode repetir? Deu um estalo aqui na minha matriz.";
-    return res.status(200).json({ reply: botReply });
+    // Formata a resposta para o padrão que o seu index.html espera ler (data.content[0].text)
+    const replyText = response.text || "🟢 Opa! Pode repetir? Deu um estalo aqui na minha matriz.";
+    
+    return res.status(200).json({
+      content: [{ text: replyText }]
+    });
 
   } catch (error) {
-    console.error("Erro no Gemini:", error);
-    return res.status(500).json({ error: 'Erro interno ao processar a IA.', details: error.message });
+    console.error("Erro interno no Gemini:", error);
+    return res.status(500).json({ error: 'Erro ao processar inteligência artificial.', details: error.message });
   }
 }
