@@ -292,13 +292,11 @@ footer{width:100%;display:flex;align-items:center;justify-content:space-between;
     <div class="hstatus"><div class="ldot"></div><span id="status-txt">BLOB ATIVO</span></div>
   </header>
 
-  <!-- BLOB STAGE — plano de fundo vivo -->
   <div id="blob-stage">
     <div id="smoke-wrap"></div>
     <div class="aura"></div><div class="aura"></div><div class="aura"></div>
     <div class="blob-ground"></div>
 
-    <!-- anéis centralizados -->
     <div class="lring lring-1" style="position:absolute"></div>
     <div class="lring lring-2" style="position:absolute"></div>
     <div class="lring lring-3" style="position:absolute"></div>
@@ -318,13 +316,11 @@ footer{width:100%;display:flex;align-items:center;justify-content:space-between;
       <div class="mood-pill" id="mood-pill">● PRONTO</div>
     </div>
 
-    <!-- CHAT OVERLAY — por cima do blob -->
     <div id="chat-layer">
       <div id="messages-wrap" id="msgs"></div>
     </div>
   </div>
 
-  <!-- INPUT FIXO -->
   <div id="input-dock">
     <div class="input-row">
       <textarea id="chat-input" rows="1" placeholder="Pergunte sobre nossos planos... 💬" maxlength="400"></textarea>
@@ -531,7 +527,6 @@ function submitLead(){
   if(!name||!email){alert('Nome e e-mail são obrigatórios!');return}
   currentLead={name,email,phone};
   saveLead(currentLead);
-  // remove o form
   const cards=document.querySelectorAll('.capture-card');
   cards.forEach(c=>c.closest('.msg-row').remove());
   setState('love');
@@ -550,7 +545,7 @@ function blobTap(){
   sendMsg('Oi BLOB! Me conta sobre a Hype Lab 👋');
 }
 
-/* ══════ ENVIO E IA ══════ */
+/* ══════ ENVIO E IA (CORRIGIDO PARA VERCEL SERVERLESS) ══════ */
 const inp=document.getElementById('chat-input');
 inp.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg()}});
 inp.addEventListener('input',()=>{inp.style.height='auto';inp.style.height=Math.min(inp.scrollHeight,88)+'px'});
@@ -567,14 +562,19 @@ async function sendMsg(preset){
   appendTyping();
 
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',headers:{'Content-Type':'application/json'},
+    // Rota local/Vercel que evita problemas de CORS no front-end
+    const res=await fetch('/api/chat',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',max_tokens:1000,
-        system:SYSTEM_PROMPT,messages:history
+        system:SYSTEM_PROMPT,
+        messages:history
       })
     });
+    
     const data=await res.json();
+    if(data.error) throw new Error(data.error);
+
     let reply=data.content?.map(c=>c.text||'').join('')||'Tive um problema! Tenta de novo? 😅';
 
     // extrai estado
@@ -614,6 +614,7 @@ async function sendMsg(preset){
     if(needsCapture) setTimeout(showCaptureForm,400);
 
   }catch(err){
+    console.error(err);
     removeTyping();setState('alert');
     appendMsg('blob','Ops! Problema de conexão momentâneo 😅 Tenta novamente ou fala direto no <a href="https://wa.me/5511949946730" target="_blank">WhatsApp</a>!','alert');
   }
