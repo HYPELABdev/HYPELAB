@@ -28,7 +28,7 @@ module.exports = async (req, res) => {
 
     // Instancia o modelo moderno e rápido com as diretrizes do BLOB
     const model = genAI.getGenerativeModel({ 
-      model: 'gemini-1.5-flash',
+      model: 'gemini-2.0-flash',
       systemInstruction: system || 'Você é o BLOB, agente de vendas da Hype Lab.'
     });
 
