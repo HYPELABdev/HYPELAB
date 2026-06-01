@@ -1,7 +1,7 @@
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 
-// CORREÇÃO DEFINITIVA: Força o SDK a usar a rota estável 'v1' e ignora a 'v1beta' antiga
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY, "v1");
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+
 
 module.exports = async (req, res) => {
   // Configuração de CORS para permitir que seu site converse com a API
