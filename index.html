@@ -388,240 +388,222 @@ document.addEventListener('touchmove',e=>{
   const ang=Math.atan2(t.clientY-cy,t.clientX-cx);
   const d=Math.min(2.5,Math.hypot(t.clientX-cx,t.clientY-cy)/85);
   ec.style.transform=`translate(${Math.cos(ang)*d}px,${Math.sin(ang)*d}px)`;
-},{passive:true});
+    }, { passive: true });
 
-/* PISCAR */
-function randomBlink(){setTimeout(()=>{
-  eL.classList.add('blink');eR.classList.add('blink');
-  setTimeout(()=>{eL.classList.remove('blink');eR.classList.remove('blink');
-    if(Math.random()<.2){setTimeout(()=>{eL.classList.add('blink');eR.classList.add('blink');
-      setTimeout(()=>{eL.classList.remove('blink');eR.classList.remove('blink');randomBlink()},100)},220)}
-    else randomBlink()},130)},2200+Math.random()*4500)}
-randomBlink();
+    /* PISCAR */
+    function randomBlink() {
+      setTimeout(() => {
+        eL.classList.add('blink'); eR.classList.add('blink');
+        setTimeout(() => {
+          eL.classList.remove('blink'); eR.classList.remove('blink');
+          if (Math.random() < .2) {
+            setTimeout(() => {
+              eL.classList.add('blink'); eR.classList.add('blink');
+              setTimeout(() => { eL.classList.remove('blink'); eR.classList.remove('blink'); randomBlink() }, 100)
+            }, 220)
+          }
+          else randomBlink()
+        }, 130)
+      }, 2200 + Math.random() * 4500)
+    }
+    randomBlink();
 
-/* ══════ ESTADOS DO BLOB ══════ */
-const MOODS={
-  idle:{cls:'state-idle',pill:'● PRONTO',status:'BLOB ATIVO'},
-  loading:{cls:'state-loading',pill:'◎ CARREGANDO...',status:'PROCESSANDO'},
-  thinking:{cls:'state-thinking',pill:'~ PENSANDO...',status:'ANALISANDO'},
-  happy:{cls:'state-happy',pill:'▲ ÓTIMO!',status:'FELIZ'},
-  alert:{cls:'state-alert',pill:'⚠ ATENÇÃO',status:'ALERTA'},
-  love:{cls:'state-love',pill:'♥ ADOREI!',status:'EMPOLGADO'},
-  confused:{cls:'state-confused',pill:'? HMMMM...',status:'CONFUSO'},
-};
-function setState(s){
-  const m=MOODS[s]||MOODS.idle;
-  document.body.className=m.cls;
-  document.getElementById('mood-pill').textContent=m.pill;
-  document.getElementById('status-txt').textContent=m.status;
-  if(s==='happy'||s==='love') setTimeout(()=>setState('idle'),700);
-  if(s==='alert'||s==='confused') setTimeout(()=>setState('idle'),1200);
-}
+    /* ══════ ESTADOS DO BLOB ══════ */
+    const MOODS = {
+      idle: { cls: 'state-idle', pill: '● PRONTO', status: 'BLOB ATIVO' },
+      loading: { cls: 'state-loading', pill: '◎ CARREGANDO...', status: 'PROCESSANDO' },
+      thinking: { cls: 'state-thinking', pill: '~ PENSANDO...', status: 'ANALISANDO' },
+      happy: { cls: 'state-happy', pill: '▲ ÓTIMO!', status: 'FELIZ' },
+      alert: { cls: 'state-alert', pill: '⚠ ATENÇÃO', status: 'ALERTA' },
+      love: { cls: 'state-love', pill: '♥ ADOREI!', status: 'EMPOLGADO' },
+      confused: { cls: 'state-confused', pill: '? HMMMM...', status: 'CONFUSO' },
+    };
+    function setState(s) {
+      const m = MOODS[s] || MOODS.idle;
+      document.body.className = m.cls;
+      document.getElementById('mood-pill').textContent = m.pill;
+      document.getElementById('status-txt').textContent = m.status;
+      if (s === 'happy' || s === 'love') setTimeout(() => setState('idle'), 700);
+      if (s === 'alert' || s === 'confused') setTimeout(() => setState('idle'), 1200);
+    }
 
-/* ══════ LEAD STORAGE (localStorage JSON) ══════ */
-function getLeads(){try{return JSON.parse(localStorage.getItem('hypelab_leads')||'[]')}catch{return[]}}
-function saveLead(obj){const ls=getLeads();ls.push({...obj,ts:new Date().toISOString()});localStorage.setItem('hypelab_leads',JSON.stringify(ls))}
-let currentLead={};
+    /* ══════ LEAD STORAGE (localStorage JSON) ══════ */
+    function getLeads() { try { return JSON.parse(localStorage.getItem('hypelab_leads') || '[]') } catch { return [] } }
+    function saveLead(obj) { const ls = getLeads(); ls.push({ ...obj, ts: new Date().toISOString() }); localStorage.setItem('hypelab_leads', JSON.stringify(ls)) }
+    let currentLead = {};
 
-/* ══════ CHAT ENGINE ══════ */
-const msgWrap=document.getElementById('messages-wrap');
-let history=[];
-let waitingCapture=false;
+    /* ══════ CHAT ENGINE ══════ */
+    const msgWrap = document.getElementById('messages-wrap');
+    let history = [];
+    let waitingCapture = false;
 
-const SYSTEM_PROMPT=`Você é BLOB, o agente de vendas e atendimento da HYPE LAB — agência digital especializada em vitrines e lojas digitais para pequenos e médios negócios.
-
-PERSONALIDADE:
-- Nome: BLOB 🟢
-- Tom: Amigável, animado, jovem, direto. Use emojis com moderação e naturalidade
-- Idioma: Português brasileiro coloquial mas profissional
-- Nunca seja robótico ou formal demais
-- Seja genuinamente empolgado com o produto
+    // CORREÇÃO: O Prompt do sistema foi limpo de tags estruturais complexas, deixando a IA livre para responder de forma fluida.
+    const SYSTEM_PROMPT = `Você é BLOB, o agente inteligente de vendas e suporte da HYPE LAB.
+Sua missão é explicar os planos da Hype Lab de forma dinâmica, jovem, empática e focada em fechar negócio.
 
 PRODUTOS DA HYPE LAB:
-
 🛍️ LOJINHA EXPRESS — R$ 150/mês
-- Vitrine digital rápida e clean
-- Painel de edição em tempo real: muda nome, cor tema, produtos, banners, logo em segundos
-- Sistema JSON (dados) + HTML (visual) hospedado no Vercel + GitHub
-- Integração WhatsApp para pedidos diretos
-- Entrega em 24h
-- Ideal para: quem quer estar online rápido sem dor de cabeça
+- Vitrine digital rápida e clean. Entrega em 24h.
+- Painel para mudar nomes, produtos, cores e banners em tempo real.
+- Sistema moderno (JSON + HTML) hospedado em Vercel e GitHub.
+- Integração de pedidos diretos para o WhatsApp.
 
 💎 LOJINHA PREMIUM — R$ 450/mês
-- Multi-páginas (Home, Catálogo, Sobre, Contato)
-- Painel avançado com dezenas de personalizações
-- Animações e visual sofisticado
-- SEO avançado + analytics
-- Suporte técnico prioritário
-- Entrega em 48h
-- Ideal para: marcas que querem presença digital profissional
+- Multi-páginas completas (Home, Catálogo, Sobre, Contato). Entrega em 48h.
+- Painel avançado com dezenas de customizações, animações fluidas e visual profissional.
+- Estrutura otimizada com SEO avançado e Google Analytics.
+- Suporte técnico prioritário.
 
-CONTATO: WhatsApp https://wa.me/5511949946730
+Link de Contato WhatsApp: https://wa.me/5511949946730
 
-REGRAS IMPORTANTES:
-1. SEMPRE responda em no máximo 3 parágrafos curtos
-2. Quando o visitante demonstrar interesse real em contratar, peça nome e email NATURALMENTE dizendo algo como "Posso registrar seus dados para nossa equipe entrar em contato?" — quando pedir dados, inclua exatamente este texto no final da mensagem: [CAPTURE_LEAD]
-3. Quando mencionar WhatsApp inclua o link clicável
-4. Nunca invente funcionalidades não listadas
-5. Se perguntarem algo que você não sabe, seja honesto e redirecione para o WhatsApp
-6. DETECTE O HUMOR da conversa e adapte: se alguém estiver empolgado, seja mais animado; se confuso, seja mais didático
+REGRAS:
+1. Responda de forma curta e objetiva (máximo 3 parágrafos curtos).
+2. Use emojis de forma espontânea.
+3. Sempre que o usuário quiser fechar contrato ou demonstrar real interesse, peça o Nome e o E-mail dele de forma amigável para contato da equipe. Adicione o termo obrigatório [CAPTURE_LEAD] no final do texto quando fizer esse pedido.
+4. Adicione OBRIGATORIAMENTE uma dessas tags de estado no final da sua resposta (em uma linha isolada): [STATE:happy], [STATE:thinking], [STATE:confused], [STATE:alert], [STATE:love] ou [STATE:idle].`;
 
-DETECÇÃO DE ESTADO (inclua no FIM de cada resposta, em linha separada, sem espaço):
-- Se resposta = positiva/venda/plano: [STATE:happy]
-- Se resposta = informações técnicas/explicação: [STATE:thinking]  
-- Se resposta = não sabe/não pode fazer: [STATE:confused]
-- Se resposta = alerta/atenção/preço: [STATE:alert]
-- Se resposta = muito empolgado/elogio: [STATE:love]
-- Se resposta = normal/neutra: [STATE:idle]`;
+    function makeMiniBlobHTML(mood = 'idle') {
+      const eyeColor = mood === 'alert' ? '#ff8800' : mood === 'love' ? '#ff6688' : 'var(--g1)';
+      return `<div class="mini-blob ${mood}"><div class="mini-eyes"><div class="mini-eye" style="background:${eyeColor};box-shadow:0 0 4px ${eyeColor}"></div><div class="mini-eye" style="background:${eyeColor};box-shadow:0 0 4px ${eyeColor}"></div></div></div>`;
+    }
 
-function makeMiniBlobHTML(mood='idle'){
-  const eyeColor=mood==='alert'?'#ff8800':mood==='love'?'#ff6688':'var(--g1)';
-  return `<div class="mini-blob ${mood}"><div class="mini-eyes"><div class="mini-eye" style="background:${eyeColor};box-shadow:0 0 4px ${eyeColor}"></div><div class="mini-eye" style="background:${eyeColor};box-shadow:0 0 4px ${eyeColor}"></div></div></div>`;
-}
+    function appendMsg(type, html, mood = 'idle', extras) {
+      const row = document.createElement('div');
+      row.className = `msg-row ${type}`;
+      if (type === 'blob') {
+        row.innerHTML = `${makeMiniBlobHTML(mood)}<div><div class="bubble">${html}</div>${extras || ''}</div>`;
+      } else {
+        row.innerHTML = `<div class="bubble">${html}</div>`;
+      }
+      msgWrap.appendChild(row);
+      msgWrap.scrollTop = msgWrap.scrollHeight;
+      return row;
+    }
 
-function appendMsg(type, html, mood='idle', extras){
-  const row=document.createElement('div');
-  row.className=`msg-row ${type}`;
-  if(type==='blob'){
-    row.innerHTML=`${makeMiniBlobHTML(mood)}<div><div class="bubble">${html}</div>${extras||''}</div>`;
-  } else {
-    row.innerHTML=`<div class="bubble">${html}</div>`;
-  }
-  msgWrap.appendChild(row);
-  msgWrap.scrollTop=msgWrap.scrollHeight;
-  return row;
-}
+    function appendTyping() {
+      const row = document.createElement('div'); row.className = 'msg-row blob'; row.id = 'typing-row';
+      row.innerHTML = `${makeMiniBlobHTML('thinking')}<div class="typing-bub"><div class="td"></div><div class="td"></div><div class="td"></div></div>`;
+      msgWrap.appendChild(row); msgWrap.scrollTop = msgWrap.scrollHeight;
+    }
 
-function appendTyping(){
-  const row=document.createElement('div');row.className='msg-row blob';row.id='typing-row';
-  row.innerHTML=`${makeMiniBlobHTML('thinking')}<div class="typing-bub"><div class="td"></div><div class="td"></div><div class="td"></div></div>`;
-  msgWrap.appendChild(row);msgWrap.scrollTop=msgWrap.scrollHeight;
-}
+    function removeTyping() { const t = document.getElementById('typing-row'); if (t) t.remove() }
 
-function removeTyping(){const t=document.getElementById('typing-row');if(t)t.remove()}
-
-function showQuickReplies(qs){
-  const div=document.createElement('div');div.className='quick-replies';
-  qs.forEach(q=>{const b=document.createElement('button');b.className='qr';b.textContent=q;
-    b.onclick=()=>{div.remove();sendMsg(q)};div.appendChild(b)});
-  msgWrap.appendChild(div);msgWrap.scrollTop=msgWrap.scrollHeight;
-}
-
-function showCaptureForm(){
-  const row=document.createElement('div');row.className='msg-row blob';
-  row.innerHTML=`${makeMiniBlobHTML('happy')}<div><div class="capture-card">
+    function showCaptureForm() {
+      const row = document.createElement('div'); row.className = 'msg-row blob';
+      row.innerHTML = `${makeMiniBlobHTML('happy')}<div><div class="capture-card">
     <p>📋 Me passa seus dados e nossa equipe entra em contato pra montar a proposta ideal pra você!</p>
     <input class="capture-field" id="cap-name" placeholder="Seu nome" type="text">
     <input class="capture-field" id="cap-email" placeholder="Seu e-mail" type="email">
     <input class="capture-field" id="cap-phone" placeholder="WhatsApp (opcional)" type="tel">
     <button class="capture-btn" onclick="submitLead()">✓ Enviar meus dados</button>
   </div></div>`;
-  msgWrap.appendChild(row);msgWrap.scrollTop=msgWrap.scrollHeight;
-  waitingCapture=false;
-}
-
-function submitLead(){
-  const name=document.getElementById('cap-name')?.value.trim();
-  const email=document.getElementById('cap-email')?.value.trim();
-  const phone=document.getElementById('cap-phone')?.value.trim();
-  if(!name||!email){alert('Nome e e-mail são obrigatórios!');return}
-  currentLead={name,email,phone};
-  saveLead(currentLead);
-  const cards=document.querySelectorAll('.capture-card');
-  cards.forEach(c=>c.closest('.msg-row').remove());
-  setState('love');
-  appendMsg('blob',`Perfeito, <strong>${name}</strong>! 🎉 Seus dados foram salvos. Nossa equipe vai entrar em contato em breve. Enquanto isso, quer saber mais sobre algum plano específico?`,'love',
-    buildQuickRepliesHTML(['Ver Express R$150','Ver Premium R$450','Falar no WhatsApp']));
-  history.push({role:'assistant',content:`Lead capturado: nome=${name}, email=${email}`});
-}
-
-function buildQuickRepliesHTML(qs){
-  return `<div class="quick-replies" style="margin-top:6px">${qs.map(q=>`<button class="qr" onclick="sendMsg('${q}')">${q}</button>`).join('')}</div>`;
-}
-
-function blobTap(){
-  if(navigator.vibrate)navigator.vibrate(8);
-  setState('happy');
-  sendMsg('Oi BLOB! Me conta sobre a Hype Lab 👋');
-}
-
-/* ══════ ENVIO E IA ══════ */
-const inp=document.getElementById('chat-input');
-inp.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg()}});
-inp.addEventListener('input',()=>{inp.style.height='auto';inp.style.height=Math.min(inp.scrollHeight,88)+'px'});
-
-async function sendMsg(preset){
-  const text=preset||(inp.value.trim());
-  if(!text)return;
-  if(!preset)inp.value='';inp.style.height='auto';
-
-  appendMsg('user',text);
-  history.push({role:'user',content:text});
-  setState('thinking');
-  document.getElementById('send-btn').disabled=true;
-  appendTyping();
-
-  try{
-    // Corrigido para bater na sua nova API interna hospedada na Vercel
-    const res=await fetch('/api/chat',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        system:SYSTEM_PROMPT,
-        messages:history
-      })
-    });
-    const data=await res.json();
-    let reply=data.content?.map(c=>c.text||'').join('')||'Tive um problema! Tenta de novo? 😅';
-
-    let detectedState='idle';
-    const stateMatch=reply.match(/\[STATE:(\w+)\]/);
-    if(stateMatch){detectedState=stateMatch[1];reply=reply.replace(/\[STATE:\w+\]/g,'').trim()}
-
-    const needsCapture=reply.includes('[CAPTURE_LEAD]');
-    reply=reply.replace('[CAPTURE_LEAD]','').trim();
-
-    removeTyping();
-    setState(detectedState);
-    history.push({role:'assistant',content:reply});
-
-    const fmt=reply
-      .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
-      .replace(/\*(.*?)\*/g,'<em>$1</em>')
-      .replace(/(https?:\/\/[^\s]+)/g,'<a href="$1" target="_blank">$1</a>')
-      .replace(/\n/g,'<br>');
-
-    let qrHTML='';
-    const lower=reply.toLowerCase();
-    if(lower.includes('express')&&lower.includes('premium')){
-      qrHTML=buildQuickRepliesHTML(['Quero Express R$150','Quero Premium R$450','Tirar dúvida'])
-    } else if(lower.includes('express')){
-      qrHTML=buildQuickRepliesHTML(['Contratar Express','Ver o Premium','Mais detalhes'])
-    } else if(lower.includes('premium')){
-      qrHTML=buildQuickRepliesHTML(['Contratar Premium','Ver o Express','Falar no WhatsApp'])
-    } else if(lower.includes('whatsapp')){
-      qrHTML=buildQuickRepliesHTML(['Abrir WhatsApp','Ver planos','Outra dúvida'])
+      msgWrap.appendChild(row); msgWrap.scrollTop = msgWrap.scrollHeight;
+      waitingCapture = false;
     }
 
-    appendMsg('blob',fmt,detectedState,qrHTML);
-    if(needsCapture) setTimeout(showCaptureForm,400);
+    function submitLead() {
+      const name = document.getElementById('cap-name')?.value.trim();
+      const email = document.getElementById('cap-email')?.value.trim();
+      const phone = document.getElementById('cap-phone')?.value.trim();
+      if (!name || !email) { alert('Nome e e-mail são obrigatórios!'); return }
+      currentLead = { name, email, phone };
+      saveLead(currentLead);
+      const cards = document.querySelectorAll('.capture-card');
+      cards.forEach(c => c.closest('.msg-row').remove());
+      setState('love');
+      appendMsg('blob', `Perfeito, <strong>${name}</strong>! 🎉 Seus dados foram salvos. Nossa equipe vai entrar em contato em breve. Enquanto isso, quer saber mais sobre algum plano específico?`, 'love',
+        buildQuickRepliesHTML(['Ver Express R$150', 'Ver Premium R$450', 'Falar no WhatsApp']));
+      history.push({ role: 'model', parts: [{ text: `Lead capturado: nome=${name}, email=${email}` }] });
+    }
 
-  }catch(err){
-    removeTyping();setState('alert');
-    appendMsg('blob','Ops! Problema de conexão momentâneo 😅 Tenta novamente ou fala direto no <a href="https://wa.me/5511949946730" target="_blank">WhatsApp</a>!','alert');
-  }
-  document.getElementById('send-btn').disabled=false;
-}
+    function buildQuickRepliesHTML(qs) {
+      return `<div class="quick-replies" style="margin-top:6px">${qs.map(q => `<button class="qr" onclick="sendMsg('${q}')">${q}</button>`).join('')}</div>`;
+    }
 
-/* ══════ INIT ══════ */
-window.onload=()=>{
-  setTimeout(()=>{
-    setState('happy');
-    appendMsg('blob','Oi! 👋 Sou o <strong>BLOB</strong>, agente da Hype Lab. Aqui a gente cria lojas digitais que você edita em tempo real — sem técnico, sem complicação. O que você quer saber?','happy',
-      buildQuickRepliesHTML(['🛍️ Lojinha Express R$150','💎 Lojinha Premium R$450','Como funciona?','Quero contratar!']));
-    history.push({role:'assistant',content:'Oi! Sou o BLOB, agente da Hype Lab. O que você quer saber?'});
-  },500);
-};
+    function blobTap() {
+      if (navigator.vibrate) navigator.vibrate(8);
+      setState('happy');
+      sendMsg('Oi BLOB! Me conta sobre a Hype Lab 👋');
+    }
+
+    /* ══════ ENVIO E IA ══════ */
+    const inp = document.getElementById('chat-input');
+    inp.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMsg() } });
+    inp.addEventListener('input', () => { inp.style.height = 'auto'; inp.style.height = Math.min(inp.scrollHeight, 88) + 'px' });
+
+    async function sendMsg(preset) {
+      const text = preset || (inp.value.trim());
+      if (!text) return;
+      if (!preset) inp.value = ''; inp.style.height = 'auto';
+
+      appendMsg('user', text);
+      
+      // Adaptando para a estrutura correta de objetos esperada pelo novo backend v1 estável
+      history.push({ role: 'user', content: text });
+      setState('thinking');
+      document.getElementById('send-btn').disabled = true;
+      appendTyping();
+
+      try {
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            system: SYSTEM_PROMPT,
+            messages: history
+          })
+        });
+        const data = await res.json();
+        let reply = data.content?.map(c => c.text || '').join('') || 'Tive um problema! Tenta de novo? 😅';
+
+        let detectedState = 'idle';
+        const stateMatch = reply.match(/\[STATE:(\w+)\]/);
+        if (stateMatch) { detectedState = stateMatch[1]; reply = reply.replace(/\[STATE:\w+\]/g, '').trim() }
+
+        const needsCapture = reply.includes('[CAPTURE_LEAD]');
+        reply = reply.replace('[CAPTURE_LEAD]', '').trim();
+
+        removeTyping();
+        setState(detectedState);
+        history.push({ role: 'assistant', content: reply });
+
+        const fmt = reply
+          .replace(/\*\*(.*?)\*\//g, '<strong>$1</strong>')
+          .replace(/\*(.*?)\*/g, '<em>$1</em>')
+          .replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank">$1</a>')
+          .replace(/\n/g, '<br>');
+
+        let qrHTML = '';
+        const lower = reply.toLowerCase();
+        if (lower.includes('express') && lower.includes('premium')) {
+          qrHTML = buildQuickRepliesHTML(['Quero Express R$150', 'Quero Premium R$450', 'Tirar dúvida'])
+        } else if (lower.includes('express')) {
+          qrHTML = buildQuickRepliesHTML(['Contratar Express', 'Ver o Premium', 'Mais detalhes'])
+        } else if (lower.includes('premium')) {
+          qrHTML = buildQuickRepliesHTML(['Contratar Premium', 'Ver o Express', 'Falar no WhatsApp'])
+        } else if (lower.includes('whatsapp')) {
+          qrHTML = buildQuickRepliesHTML(['Abrir WhatsApp', 'Ver planos', 'Outra dúvida'])
+        }
+
+        appendMsg('blob', fmt, detectedState, qrHTML);
+        if (needsCapture) setTimeout(showCaptureForm, 400);
+
+      } catch (err) {
+        removeTyping(); setState('alert');
+        appendMsg('blob', 'Ops! Problema de conexão momentâneo 😅 Tenta novamente ou fala direto no <a href="https://wa.me/5511949946730" target="_blank">WhatsApp</a>!', 'alert');
+      }
+      document.getElementById('send-btn').disabled = false;
+    }
+
+    /* ══════ INIT ══════ */
+    window.onload = () => {
+      setTimeout(() => {
+        setState('happy');
+        appendMsg('blob', 'Oi! 👋 Sou o <strong>BLOB</strong>, agente da Hype Lab. Aqui a gente cria lojas digitais que você edita em tempo real — sem técnico, sem complicação. O que você quer saber?', 'happy',
+          buildQuickRepliesHTML(['🛍️ Lojinha Express R$150', '💎 Lojinha Premium R$450', 'Como funciona?', 'Quero contratar!']));
+        history.push({ role: 'assistant', content: 'Oi! Sou o BLOB, agente da Hype Lab. O que você quer saber?' });
+      }, 500);
+    };
 </script>
 </body>
 </html>
