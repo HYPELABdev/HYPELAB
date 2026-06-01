@@ -1,7 +1,4 @@
-// api/chat.js
-const { GoogleGenerativeAI } = require('@google/generative-ai');
-
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+// api/chat.js — Groq (Llama 3.3 70B) — 14.400 pedidos/dia grátis
 
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -20,38 +17,44 @@ module.exports = async (req, res) => {
       });
     }
 
-    const model = genAI.getGenerativeModel({
-      model: 'gemini-2.5-flash-lite',
-      systemInstruction: system || 'Você é o BLOB, agente de vendas da Hype Lab.'
+    // Monta o histórico no formato OpenAI (compatível com Groq)
+    const groqMessages = [
+      { role: 'system', content: system || 'Você é o BLOB, agente de vendas da Hype Lab.' },
+      ...messages.map(m => ({
+        role: m.role === 'assistant' ? 'assistant' : 'user',
+        content: m.content || ''
+      }))
+    ];
+
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        model: 'llama-3.3-70b-versatile',
+        messages: groqMessages,
+        max_tokens: 1024,
+        temperature: 0.75
+      })
     });
 
-    const lastMessageObj = messages[messages.length - 1];
-    const userPrompt = lastMessageObj ? lastMessageObj.content : '';
+    if (!response.ok) {
+      const err = await response.text();
+      console.error('Groq API error:', err);
+      throw new Error(`Groq respondeu com status ${response.status}`);
+    }
 
-    if (!userPrompt) return res.status(400).json({ error: 'Mensagem vazia.' });
+    const data = await response.json();
+    const replyText = data.choices?.[0]?.message?.content || 'Tive um problema! Tenta de novo? 😅';
 
-    const rawHistory = messages.slice(0, -1);
-    const chatHistory = [];
-
-    rawHistory.forEach(msg => {
-      if (msg.role === 'user' || msg.role === 'assistant') {
-        const role = msg.role === 'assistant' ? 'model' : 'user';
-        if (chatHistory.length === 0 && role === 'model') return;
-        if (chatHistory.length === 0 || chatHistory[chatHistory.length - 1].role !== role) {
-          chatHistory.push({ role, parts: [{ text: msg.content || '' }] });
-        }
-      }
+    return res.status(200).json({
+      content: [{ text: replyText }]
     });
-
-    const chat = model.startChat({ history: chatHistory });
-    const result = await chat.sendMessage(userPrompt);
-    const response = await result.response;
-    const replyText = response.text();
-
-    return res.status(200).json({ content: [{ text: replyText }] });
 
   } catch (error) {
-    console.error("Erro no Gemini:", error);
+    console.error('Erro no Groq:', error);
     return res.status(200).json({
       content: [{ text: `Tive um problema técnico: ${error.message}. Tenta de novo? 😅` }]
     });
