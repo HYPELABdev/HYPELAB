@@ -26,9 +26,9 @@ module.exports = async (req, res) => {
       });
     }
 
-    // Instancia o modelo Gemini 1.5 Flash
+    // AJUSTE: Mudamos para 'gemini-pro', o modelo gratuito mais estável da biblioteca clássica
     const model = genAI.getGenerativeModel({ 
-      model: 'gemini-1.5-flash',
+      model: 'gemini-pro',
       systemInstruction: system || 'Você é o BLOB, agente de vendas da Hype Lab.'
     });
 
@@ -49,7 +49,7 @@ module.exports = async (req, res) => {
       if (msg.role === 'user' || msg.role === 'assistant') {
         const role = msg.role === 'assistant' ? 'model' : 'user';
         
-        // CORREÇÃO: Ignora se a primeira mensagem do histórico for do modelo/robô
+        // Ignora se a primeira mensagem do histórico for do modelo/robô
         if (chatHistory.length === 0 && role === 'model') {
           return; 
         }
