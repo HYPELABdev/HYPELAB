@@ -1,1246 +1,681 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>HYPE LAB · CEO Portfolio & Attendant Blob</title>
-
-<!-- Fonts: Adicionada Space Grotesk para o visual Tech Premium -->
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
-
-<style>
-:root {
-    --primary: #00ff88;
-    --primary-glow: rgba(0, 255, 136, 0.15);
-    --primary-dark: #00cc66;
-    --bg: #020508;
-    --card-bg: rgba(7, 14, 24, 0.45);
-    --glass: rgba(3, 10, 6, 0.65);
-    --border: rgba(0, 255, 136, 0.08);
-    --border-hover: rgba(0, 255, 136, 0.25);
-    --text: #f0faf4;
-    --text-muted: #7e8c9a;
-    --accent-purple: #6366f1;
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
-}
-
-html, body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Outfit', sans-serif;
-    min-height: 100vh;
-    overflow-x: hidden;
-}
-
-/* Background Canvas & Effects */
-#bg-canvas {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-}
-
-.cursor-glow {
-    position: fixed;
-    width: 350px;
-    height: 350px;
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 1;
-    background: radial-gradient(circle, rgba(0, 255, 136, 0.035) 0%, transparent 70%);
-    transform: translate(-50%, -50%);
-    transition: left 0.1s, top 0.1s;
-    will-change: left, top;
-}
-
-/* Layout App Wrapper */
-#app-container {
-    position: relative;
-    z-index: 10;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 30px;
-}
-
-@media(min-width: 992px) {
-    #app-container {
-        grid-template-columns: 1fr 400px;
-        padding: 40px 20px;
-    }
-}
-
-/* Top Navigation Bar */
-.profile-nav {
-    grid-column: 1 / -1;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 0 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-}
-
-.nav-brand {
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 700;
-    font-size: 16px;
-    letter-spacing: 3px;
-    background: linear-gradient(90deg, var(--primary), #fff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.nav-actions {
-    display: flex;
-    gap: 12px;
-}
-
-.nav-btn {
-    padding: 10px 22px;
-    border-radius: 100px;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.3s cubic-bezier(.15,.85,.45,1);
-    text-decoration: none;
-    font-family: 'Space Grotesk', sans-serif;
-}
-
-.nav-btn.purple {
-    background: var(--accent-purple);
-    color: #fff;
-    border: none;
-    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
-}
-
-.nav-btn.purple:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
-}
-
-/* Category Ticker */
-.ticker-container {
-    grid-column: 1 / -1;
-    display: flex;
-    gap: 20px;
-    overflow-x: auto;
-    padding: 10px 0;
-    scrollbar-width: none;
-}
-.ticker-container::-webkit-scrollbar { display: none; }
-
-.ticker-item {
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    color: var(--text-muted);
-    white-space: nowrap;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-.ticker-item::before {
-    content: '✦';
-    color: var(--primary);
-}
-
-/* Main Content Flow */
-.main-content-flow {
-    display: flex;
-    flex-direction: column;
-    gap: 35px;
-}
-
-/* Profile Hero Card */
-.profile-hero-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 32px;
-    padding: 40px;
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    display: flex;
-    flex-direction: column;
-    gap: 35px;
-    position: relative;
-    overflow: hidden;
-}
-
-@media(min-width: 768px) {
-    .profile-hero-card {
-        flex-direction: row;
-        align-items: center;
-    }
-}
-
-.avatar-block {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-    flex-shrink: 0;
-}
-
-.avatar-wrapper {
-    position: relative;
-    width: 180px;
-    height: 180px;
-    border-radius: 50%;
-    padding: 6px;
-    background: linear-gradient(135deg, var(--primary), var(--accent-purple));
-    box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-}
-
-.avatar-wrapper.effect-pulse {
-    animation: avatarPulse 3s infinite ease-in-out;
-}
-
-@keyframes avatarPulse {
-    0%, 100% { transform: scale(1); box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
-    50% { transform: scale(1.03); box-shadow: 0 15px 40px rgba(0,255,136,0.2); }
-}
-
-.avatar-img {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    object-fit: cover;
-    background: #050c14;
-    display: block;
-}
-
-.effect-toggle-btn {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.08);
-    color: #fff;
-    padding: 6px 14px;
-    border-radius: 100px;
-    font-size: 11px;
-    cursor: pointer;
-    font-family: 'Space Mono', monospace;
-    transition: 0.2s;
-}
-.effect-toggle-btn:hover { background: rgba(0,255,136,0.1); border-color: var(--primary); }
-
-.profile-info-block {
-    flex: 1;
-}
-
-.info-tag {
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    color: var(--primary);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 12px;
-    display: inline-block;
-}
-
-.editable-text {
-    outline: none;
-    transition: background 0.2s;
-    border-radius: 4px;
-    padding: 2px 4px;
-}
-.editable-text:focus {
-    background: rgba(255, 255, 255, 0.06);
-    box-shadow: 0 0 0 2px var(--primary);
-}
-
-/* Nova Tipografia Ultra Tech para os Títulos Principais */
-.profile-info-block h1 {
-    font-size: clamp(26px, 3.8vw, 38px);
-    font-weight: 700;
-    letter-spacing: -0.5px;
-    line-height: 1.25;
-    margin-bottom: 15px;
-    font-family: 'Space Grotesk', sans-serif;
-    background: linear-gradient(to bottom, #fff 70%, var(--text-muted) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.profile-info-block p {
-    color: var(--text-muted);
-    font-size: 15px;
-    line-height: 1.7;
-    margin-bottom: 20px;
-}
-
-/* Counters Component Block */
-.counters-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 15px;
-    width: 100%;
-}
-
-.counter-card {
-    background: rgba(255,255,255,0.01);
-    border: 1px solid rgba(255, 255, 255, 0.03);
-    border-radius: 20px;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    position: relative;
-}
-
-.counter-icon {
-    font-size: 20px;
-    color: var(--accent-purple);
-    margin-bottom: 4px;
-}
-.counter-card:nth-child(2) .counter-icon { color: var(--primary); }
-.counter-card:nth-child(3) .counter-icon { color: #ff007f; }
-
-.counter-value-wrapper {
-    display: flex;
-    align-items: center;
-    font-size: 26px;
-    font-weight: 700;
-    font-family: 'Space Grotesk', sans-serif;
-    color: #fff;
-}
-
-.counter-label {
-    font-size: 12px;
-    color: var(--text-muted);
-    font-weight: 500;
-}
-
-/* Specialties Grid Section */
-.section-header {
-    margin-bottom: 15px;
-}
-.section-header span {
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    color: var(--accent-purple);
-    text-transform: uppercase;
-    letter-spacing: 2px;
-}
-.section-header h2 {
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 700;
-    font-size: 24px;
-    margin-top: 4px;
-}
-
-.specialties-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 15px;
-}
-
-.specialty-card {
-    background: rgba(7, 14, 24, 0.2);
-    border: 1px solid rgba(255,255,255,0.02);
-    border-radius: 20px;
-    padding: 25px;
-    transition: 0.3s ease;
-}
-.specialty-card:hover {
-    border-color: rgba(99, 102, 241, 0.2);
-    background: rgba(99, 102, 241, 0.02);
-}
-
-.specialty-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
-    background: rgba(255,255,255,0.02);
-    border: 1px solid rgba(255,255,255,0.05);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--primary);
-    margin-bottom: 16px;
-}
-
-.specialty-card h3 {
-    font-size: 16px;
-    font-weight: 700;
-    font-family: 'Space Grotesk', sans-serif;
-    margin-bottom: 8px;
-}
-.specialty-card p {
-    font-size: 13px;
-    color: var(--text-muted);
-    line-height: 1.5;
-}
-
-/* Lojinha Express Preview Layout Section */
-.express-showcase-box {
-    background: linear-gradient(145deg, rgba(7,14,24,0.6), rgba(2,5,8,0.9));
-    border: 1px solid var(--border);
-    border-radius: 32px;
-    padding: 30px;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-}
-.express-showcase-box:hover {
-    border-color: var(--border-hover);
-    box-shadow: 0 25px 50px rgba(0, 255, 136, 0.03);
-}
-
-.badge-price-tag {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
-    color: #020508;
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    font-weight: 800;
-    padding: 6px 16px;
-    border-radius: 50px;
-    box-shadow: 0 5px 15px rgba(0, 255, 136, 0.2);
-}
-
-.express-thumb-zone {
-    width: 100%;
-    height: 220px;
-    border-radius: 20px;
-    overflow: hidden;
-    position: relative;
-    border: 1px solid rgba(255,255,255,0.05);
-}
-.express-thumb-zone img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-.express-thumb-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to top, #020508 10%, transparent 80%);
-}
-
-.express-info-panel h3 {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 22px;
-    font-weight: 700;
-    margin-bottom: 10px;
-}
-.express-info-panel p {
-    color: var(--text-muted);
-    font-size: 14px;
-    line-height: 1.6;
-    margin-bottom: 20px;
-}
-
-.btn-trigger-preview {
-    width: 100%;
-    background: #fff;
-    color: #000;
-    border: none;
-    padding: 16px;
-    border-radius: 16px;
-    font-weight: 800;
-    cursor: pointer;
-    font-size: 13px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    text-align: center;
-    font-family: 'Space Grotesk', sans-serif;
-    transition: 0.2s;
-}
-.btn-trigger-preview:hover {
-    background: var(--primary);
-    transform: translateY(-2px);
-    box-shadow: 0 12px 25px rgba(0,255,136,0.25);
-}
-
-/* Right Column: Blob Attendant */
-.blob-sidebar-panel {
-    align-self: start;
-    position: sticky;
-    top: 40px;
-    height: calc(100vh - 80px);
-    min-height: 580px;
-    background: var(--glass);
-    border: 1px solid rgba(0, 255, 136, 0.12);
-    border-radius: 32px;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    box-shadow: 0 30px 60px rgba(0,0,0,0.4);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-}
-
-.blob-stage-container {
-    position: relative;
-    height: 240px;
-    width: 100%;
-    background: radial-gradient(circle at 50% 50%, rgba(0, 255, 136, 0.03), transparent 70%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    border-bottom: 1px solid rgba(255,255,255,0.02);
-}
-
-#smoke-wrap {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 1;
-}
-.sp {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(15px);
-    animation: smokeUp linear infinite;
-    will-change: transform, opacity;
-}
-@keyframes smokeUp {
-    0% { transform: translateY(40px) scale(0.3) rotate(0deg); opacity: 0.4; }
-    50% { opacity: 0.2; }
-    100% { transform: translateY(-120px) scale(1.6) rotate(var(--r)); opacity: 0; }
-}
-
-.blob-aura {
-    position: absolute;
-    border-radius: 50%;
-    border: 1px solid rgba(0, 255, 136, 0.05);
-    animation: auraOut 4s ease-out infinite;
-    pointer-events: none;
-}
-.blob-aura:nth-child(1) { width: 140px; height: 140px; animation-delay: 0s; }
-.blob-aura:nth-child(2) { width: 190px; height: 190px; animation-delay: 1.5s; }
-@keyframes auraOut { 0% { opacity: 0.4; transform: scale(0.8); } 100% { opacity: 0; transform: scale(1.15); } }
-
-.blob-ground-shadow {
-    position: absolute;
-    width: 100px;
-    height: 25px;
-    border-radius: 50%;
-    background: radial-gradient(ellipse, rgba(0, 255, 136, 0.15) 0%, transparent 70%);
-    bottom: 45px;
-    filter: blur(4px);
-    animation: groundGlow 2.5s ease-in-out infinite;
-}
-@keyframes groundGlow { 0%, 100% { opacity: 0.8; transform: scaleX(1); } 50% { opacity: 0.4; transform: scaleX(0.8); } }
-
-.lring { position: absolute; border-radius: 50%; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
-.lring-1 { width: 120px; height: 120px; border: 1.5px solid transparent; border-top: 1.5px solid var(--primary); z-index: 4; }
-body.state-loading .lring-1 { opacity: 1; animation: rot1 0.7s linear infinite; }
-@keyframes rot1 { to { transform: rotate(360deg); } }
-
-.blob-core-wrap {
-    position: relative;
-    width: 96px;
-    height: 96px;
-    z-index: 5;
-}
-body.state-idle .blob-core-wrap { animation: bfloat 3s ease-in-out infinite; }
-body.state-thinking .blob-core-wrap { animation: bthink 1.5s ease-in-out infinite; }
-body.state-happy .blob-core-wrap { animation: bjump 0.5s ease-out 1; }
-@keyframes bfloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-@keyframes bthink { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-4px) rotate(-3deg); } }
-@keyframes bjump { 0%, 100% { transform: translateY(0); } 35% { transform: translateY(-15px) scale(1.04); } }
-
-.blob-render-body {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background: radial-gradient(circle at 35% 30%, #1e2e22 0%, #081408 45%, #020804 100%);
-    border: 1px solid rgba(0,255,136,0.1);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.8), inset 0 -4px 10px rgba(0,0,0,0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-}
-
-.blob-render-eyes {
-    display: flex;
-    gap: 16px;
-    position: relative;
-    transition: transform 0.1s ease-out;
-}
-.blob-eye-node {
-    width: 9px;
-    height: 15px;
-    background: var(--primary);
-    border-radius: 100px;
-    box-shadow: 0 0 10px var(--primary);
-    transition: all 0.12s;
-}
-.blob-eye-node.blink { transform: scaleY(0.05) !important; }
-
-.blob-meta-badge {
-    position: absolute;
-    bottom: 12px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-}
-.blob-meta-badge h4 { font-family: 'Space Grotesk', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 1px; }
-.blob-meta-badge span { font-family: 'Space Mono', monospace; font-size: 7px; color: var(--primary); background: rgba(0,255,136,0.05); padding: 1px 6px; border-radius: 100px; border: 1px solid rgba(0,255,136,0.15); }
-
-/* Chat Streams */
-.chat-stream-viewport {
-    flex: 1;
-    overflow-y: auto;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    background: rgba(0,0,0,0.15);
-    scrollbar-width: thin;
-    scrollbar-color: rgba(0,255,136,0.1) transparent;
-}
-.chat-stream-viewport::-webkit-scrollbar { width: 3px; }
-.chat-stream-viewport::-webkit-scrollbar-thumb { background: rgba(0,255,136,0.1); }
-
-.chat-bubble-row {
-    display: flex;
-    gap: 8px;
-    align-items: flex-end;
-    animation: bubbleIn 0.3s cubic-bezier(.16,1,.3,1) both;
-}
-@keyframes bubbleIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-.chat-bubble-row.user { flex-direction: row-reverse; }
-
-.mini-avatar-node {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    background: radial-gradient(circle, #1e2e22, #020804);
-    border: 1px solid var(--primary);
-    flex-shrink: 0;
-}
-
-.speech-bubble {
-    max-width: 80%;
-    padding: 10px 14px;
-    border-radius: 16px;
-    font-size: 13px;
-    line-height: 1.5;
-}
-.chat-bubble-row.blob .speech-bubble {
-    background: rgba(0, 255, 136, 0.04);
-    border: 1px solid rgba(0, 255, 136, 0.1);
-    border-bottom-left-radius: 4px;
-    color: var(--text);
-}
-.chat-bubble-row.blob .speech-bubble strong { color: var(--primary); }
-.chat-bubble-row.blob .speech-bubble a { color: var(--primary); text-decoration: none; font-weight: 600; }
-.chat-bubble-row.user .speech-bubble {
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-bottom-right-radius: 4px;
-    color: #eee;
-}
-
-.replies-wrapper-dock {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    margin-top: 4px;
-}
-.reply-pill-btn {
-    background: rgba(0, 255, 136, 0.05);
-    border: 1px solid rgba(0, 255, 136, 0.15);
-    color: var(--primary);
-    padding: 5px 10px;
-    border-radius: 100px;
-    font-size: 11px;
-    font-weight: 600;
-    cursor: pointer;
-    font-family: 'Outfit', sans-serif;
-    transition: 0.2s;
-}
-.reply-pill-btn:hover { background: rgba(0, 255, 136, 0.12); transform: scale(0.98); }
-
-.typing-loader-bubble {
-    display: flex;
-    gap: 4px;
-    padding: 10px 14px;
-    background: rgba(0,255,136,0.03);
-    border: 1px solid rgba(0,255,136,0.06);
-    border-radius: 14px;
-    width: fit-content;
-}
-.dot-node { width: 4px; height: 4px; border-radius: 50%; background: var(--primary); animation: dotNodeAnim 1s infinite ease-in-out; }
-.dot-node:nth-child(2) { animation-delay: 0.2s; }
-.dot-node:nth-child(3) { animation-delay: 0.4s; }
-@keyframes dotNodeAnim { 0%, 60%, 100% { transform: translateY(0); opacity: 0.3; } 30% { transform: translateY(-4px); opacity: 1; } }
-
-.blob-input-dock {
-    padding: 12px;
-    background: rgba(2,5,8,0.7);
-    border-top: 1px solid rgba(255,255,255,0.02);
-}
-.dock-flex-row {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-}
-.dock-text-input {
-    flex: 1;
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 12px;
-    padding: 10px 14px;
-    color: #fff;
-    font-size: 13px;
-    outline: none;
-    font-family: 'Outfit', sans-serif;
-}
-.dock-text-input:focus { border-color: var(--primary); background: rgba(0,255,136,0.02); }
-.dock-send-btn {
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
-    background: var(--primary);
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: 0.2s;
-}
-.dock-send-btn:hover { transform: scale(1.05); box-shadow: 0 4px 12px var(--primary-glow); }
-.dock-send-btn svg { width: 14px; height: 14px; fill: #020508; }
-
-/* Fullscreen Overlay System */
-.preview-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(2,5,8,0.97);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    display: none;
-    z-index: 10000;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    opacity: 0;
-    transition: opacity 0.4s ease;
-}
-.preview-overlay.active { display: flex; opacity: 1; }
-.preview-header-bar { width: 100%; max-width: 1200px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-.preview-headline h2 { font-size: 18px; font-weight: 700; font-family: 'Space Grotesk', sans-serif; }
-.preview-headline p { font-size: 11px; color: var(--primary); font-family: 'Space Mono', monospace; }
-.close-overlay-btn { background: #fff; border: none; color: #000; padding: 10px 24px; border-radius: 100px; font-weight: 800; font-size: 11px; cursor: pointer; text-transform: uppercase; font-family: 'Space Grotesk', sans-serif; transition: 0.2s; }
-.close-overlay-btn:hover { background: var(--primary); }
-
-.preview-iframe-wrapper { width: 100%; max-width: 1200px; height: 80vh; background: #fff; border-radius: 24px; overflow: hidden; position: relative; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 40px 80px rgba(0,0,0,0.8); }
-#previewIframe { width: 100%; height: 100%; border: none; opacity: 0; transition: opacity 0.5s ease; }
-#previewIframe.loaded { opacity: 1; }
-
-.simulated-loader-msg { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 2px; color: var(--text-muted); }
-
-/* H-BOT Protocol Modal */
-.hbot-popup-box {
-    position: absolute;
-    top: 25px;
-    left: 50%;
-    transform: translateX(-50%) translateY(-20px);
-    background: rgba(3, 10, 6, 0.98);
-    border: 2px solid var(--primary);
-    border-radius: 20px;
-    padding: 20px;
-    width: 90%;
-    max-width: 480px;
-    z-index: 10005;
-    box-shadow: 0 30px 60px rgba(0,0,0,0.9);
-    display: none;
-    opacity: 0;
-    transition: 0.4s ease;
-}
-.hbot-popup-box.show { display: block; opacity: 1; transform: translateX(-50%) translateY(0); }
-.hbot-title { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--primary); font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
-.hbot-steps { font-size: 13px; line-height: 1.6; color: #e2e8f0; }
-.hbot-steps ol { padding-left: 16px; margin-top: 6px; }
-.hbot-steps li { margin-bottom: 4px; }
-.pass-badge { background: rgba(255,255,255,0.1); border: 1px dashed var(--primary); padding: 1px 6px; border-radius: 4px; font-family: 'Space Mono', monospace; font-weight: 700; color: var(--primary); }
-.hbot-close-btn { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 8px; border-radius: 8px; margin-top: 12px; cursor: pointer; font-size: 12px; font-weight: 600; }
-.hbot-close-btn:hover { background: rgba(255,255,255,0.12); }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Yuri Foster · Webdesigner & Diretor Criativo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* TEMA VERDE PREMIUM */
+        :root {
+            --primary: #00ff88;
+            --primary-glow: rgba(0, 255, 136, 0.25);
+            --secondary: #00cc66;
+            --bg: #020804;
+            --card-bg: rgba(5, 20, 10, 0.8);
+            --border: rgba(0, 255, 136, 0.15);
+            --text: #f0fdf4;
+            --text-muted: #86efac;
+        }
+
+        /* RESET ULTRA-CLEAN */
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent; 
+        }
+        
+        body { 
+            background: var(--bg); 
+            color: var(--text); 
+            font-family: 'Outfit', sans-serif; 
+            min-height: 100vh; 
+            overflow-x: hidden;
+        }
+
+        body.modal-open {
+            overflow: hidden !important;
+        }
+
+        #bg-canvas { 
+            position: fixed; 
+            inset: 0; 
+            z-index: 0; 
+            pointer-events: none; 
+            opacity: 0.4; 
+            will-change: transform;
+        }
+
+        /* LAYOUT FLEXÍVEL INTEGRAL */
+        #app-container {
+            position: relative; 
+            z-index: 10; 
+            max-width: 1400px; 
+            margin: 0 auto; 
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        
+        @media(min-width: 1024px) {
+            #app-container { 
+                flex-direction: row;
+                padding: 40px; 
+                gap: 40px; 
+            }
+        }
+
+        /* SEÇÃO DA ESQUERDA (CONTEÚDO) */
+        .main-content { 
+            flex: 1;
+            display: flex; 
+            flex-direction: column; 
+            gap: 30px;
+            width: 100%;
+        }
+
+        /* HEADER REFINADO */
+        .top-nav { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding-bottom: 10px; 
+        }
+        
+        .nav-brand { 
+            font-family: 'Space Grotesk', sans-serif; 
+            font-weight: 800; 
+            font-size: 22px; 
+            letter-spacing: 2px; 
+            color: #fff; 
+        }
+        
+        .nav-brand span { color: var(--primary); }
+
+        .btn {
+            padding: 12px 24px; 
+            border-radius: 100px; 
+            font-size: 13px; 
+            font-weight: 700; 
+            cursor: pointer;
+            font-family: 'Space Grotesk', sans-serif; 
+            text-decoration: none; 
+            display: inline-flex; 
+            align-items: center; 
+            justify-content: center;
+            transition: all 0.3s ease; 
+            text-transform: uppercase; 
+            letter-spacing: 1px;
+        }
+        
+        .btn-outline { 
+            background: transparent; 
+            color: var(--primary); 
+            border: 1px solid rgba(0, 255, 136, 0.4);
+        }
+        
+        .btn-outline:hover {
+            background: rgba(0, 255, 136, 0.08);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        /* TICKER */
+        .ticker-wrap { 
+            display: flex; 
+            gap: 30px; 
+            overflow-x: auto; 
+            padding: 15px 0; 
+            border-top: 1px solid var(--border); 
+            border-bottom: 1px solid var(--border); 
+            scrollbar-width: none; 
+        }
+        .ticker-wrap::-webkit-scrollbar { display: none; }
+        .ticker-item { white-space: nowrap; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; color: var(--text); text-transform: uppercase; }
+        .ticker-icon { color: var(--primary); }
+
+        /* HERO CARD */
+        .hero-card {
+            background: rgba(4, 18, 9, 0.7); 
+            border: 1px solid var(--border); 
+            border-radius: 32px;
+            padding: 35px 25px; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 35px; 
+            position: relative; 
+            overflow: hidden;
+        }
+        
+        @media(min-width: 768px) { 
+            .hero-card { flex-direction: row; align-items: center; padding: 45px; } 
+        }
+
+        /* AVATAR */
+        .avatar-section { 
+            position: relative; 
+            width: 200px; 
+            height: 200px; 
+            flex-shrink: 0; 
+            margin: 0 auto; 
+            animation: floatProfile 5s ease-in-out infinite; 
+            will-change: transform;
+        }
+        
+        @keyframes floatProfile { 
+            0%, 100% { transform: translateY(0); } 
+            50% { transform: translateY(-12px); } 
+        }
+
+        .avatar-img { 
+            width: 100%; 
+            height: 100%; 
+            border-radius: 50%; 
+            object-fit: cover; 
+            border: 3px solid var(--primary); 
+            box-shadow: 0 10px 40px var(--primary-glow); 
+            position: relative; 
+            z-index: 2; 
+        }
+
+        .avatar-spin-ring { 
+            position: absolute; 
+            inset: -12px; 
+            border-radius: 50%; 
+            border: 2px dashed var(--primary); 
+            animation: spinRing 25s linear infinite; 
+            z-index: 1; 
+            opacity: 0.4; 
+        }
+        @keyframes spinRing { to { transform: rotate(360deg); } }
+
+        /* TEXTOS HERO */
+        .hero-info { flex: 1; z-index: 2; text-align: center; }
+        @media(min-width: 768px) { .hero-info { text-align: left; } }
+        
+        .hero-tag { 
+            font-family: 'Space Grotesk', sans-serif; 
+            font-size: 12px; 
+            background: rgba(0,255,136,0.1); 
+            color: var(--primary); 
+            padding: 5px 14px; 
+            border-radius: 100px; 
+            font-weight: 700; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            margin-bottom: 15px; 
+            display: inline-block; 
+            border: 1px solid var(--border); 
+        }
+        
+        .hero-title { 
+            font-family: 'Space Grotesk', sans-serif; 
+            font-size: clamp(28px, 4vw, 42px); 
+            font-weight: 800; 
+            line-height: 1.1; 
+            margin-bottom: 15px; 
+            color: #fff; 
+        }
+        .hero-title span { color: var(--primary); }
+        .hero-desc { color: var(--text-muted); font-size: 16px; line-height: 1.6; font-weight: 300; }
+
+        /* STATS GRID - REMOVIDO BLUR PARA FLUIDEZ MOBILE */
+        .stats-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); 
+            gap: 15px; 
+        }
+        
+        .stat-box { 
+            background: rgba(10, 30, 15, 0.6); 
+            border: 1px solid rgba(0, 255, 136, 0.15); 
+            border-radius: 20px; 
+            padding: 20px; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 8px; 
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+        }
+        .stat-box:hover { 
+            border-color: var(--primary); 
+            background: rgba(0, 255, 136, 0.08);
+            transform: translateY(-3px); 
+            box-shadow: 0 10px 20px rgba(0, 255, 136, 0.1);
+        }
+        .stat-icon { font-size: 24px; }
+        .stat-number { font-family: 'Space Grotesk', sans-serif; font-size: 32px; font-weight: 800; color: #fff; }
+        .stat-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+        /* NOVO FORMATO DO CARD VITRINE: TOTALMENTE CLICÁVEL, LIMPO E SEM BLUR */
+        .express-cta {
+            background: rgba(10, 35, 18, 0.5); 
+            border: 2px solid rgba(0, 255, 136, 0.25); 
+            border-radius: 32px; 
+            padding: 20px;
+            display: flex; 
+            flex-direction: column; 
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            cursor: pointer;
+            transition: border-color 0.4s ease, transform 0.4s ease;
+        }
+
+        .express-cta:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        /* MOCKUP 3D PERSPECTIVE PREVIEW CARD */
+        .cta-preview-box {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            perspective: 1000px;
+        }
+
+        .preview-container-inner {
+            width: 100%;
+            max-width: 550px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 8px;
+            box-shadow: 0 20px 45px rgba(0,0,0,0.8);
+            overflow: hidden;
+            transform: rotateX(6deg) rotateY(-8deg) rotateZ(1deg);
+            transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+            will-change: transform;
+        }
+
+        .preview-container-inner img {
+            width: 100%;
+            height: auto;
+            border-radius: 14px;
+            display: block;
+            opacity: 0.9;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Efeito de flutuação ao passar por cima do card inteiro */
+        .express-cta:hover .preview-container-inner {
+            transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1.02);
+            border-color: rgba(0, 255, 136, 0.5);
+            box-shadow: 0 30px 60px rgba(0, 255, 136, 0.2);
+        }
+        .express-cta:hover .preview-container-inner img {
+            opacity: 1;
+        }
+
+        /* BOTÃO INTERATIVO INTEGRADO DENTRO DA IMAGEM */
+        .floating-preview-btn {
+            position: absolute;
+            bottom: 30px;
+            z-index: 20;
+            padding: 16px 32px;
+            font-size: 14px;
+            background: #fff;
+            color: #020804;
+            border-radius: 100px;
+            border: none;
+            font-weight: 800;
+            font-family: 'Space Grotesk', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none; /* Deixa o clique passar para o container pai */
+        }
+
+        .express-cta:hover .floating-preview-btn {
+            background: var(--primary);
+            transform: scale(1.08);
+            box-shadow: 0 15px 35px rgba(0, 255, 136, 0.5);
+        }
+
+        /* SEÇÃO DA DIREITA: ASSISTENTE VERCEL */
+        .blob-sidebar {
+            width: 100%;
+            height: 600px; 
+            border-radius: 28px; 
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+            border: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+        
+        @media(min-width: 1024px) {
+            .blob-sidebar { 
+                width: 420px; 
+                height: calc(100vh - 80px); 
+                position: sticky; 
+                top: 40px; 
+            }
+        }
+        
+        .blob-iframe {
+            width: 100%; 
+            height: 100%; 
+            border: none; 
+            background: #05140a;
+        }
+
+        /* OVERLAY DO SIMULADOR (Z-INDEX ADAPTADO) */
+        .overlay { position: fixed; inset: 0; background: rgba(2, 8, 4, 0.98); z-index: 9999; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 15px; opacity: 0; transition: opacity 0.3s ease; }
+        .overlay.active { display: flex; opacity: 1; }
+        .overlay-header { width: 100%; max-width: 1200px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .overlay-header h3 { font-family: 'Space Grotesk', sans-serif; font-size: 18px; color: var(--primary); letter-spacing: 1px; }
+        .close-btn { background: #fff; color: #000; border: none; padding: 10px 20px; border-radius: 100px; font-weight: 800; cursor: pointer; font-family: 'Space Grotesk', sans-serif; transition: 0.2s; text-transform: uppercase; font-size: 12px; }
+        .close-btn:hover { background: var(--primary); }
+        .iframe-container { width: 100%; max-width: 1200px; height: 80vh; background: #fff; border-radius: 24px; overflow: hidden; border: 1px solid rgba(0, 255, 136, 0.3); position: relative; }
+        .iframe-container iframe { width: 100%; height: 100%; border: none; }
+
+        /* POPUP DO BLOB ORGANIZADO */
+        .blob-popup {
+            position: absolute;
+            inset: 0;
+            background: rgba(2, 8, 4, 0.96);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .blob-popup.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .blob-popup-card {
+            background: #05140a;
+            border: 2px solid var(--primary);
+            border-radius: 24px;
+            max-width: 440px;
+            width: 100%;
+            padding: 35px 30px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 255, 136, 0.2);
+            transform: scale(0.9);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .blob-popup.active .blob-popup-card {
+            transform: scale(1);
+        }
+
+        /* ROSTO REALISTA DO BLOB EM CSS INTELIGENTE */
+        .blob-character-avatar {
+            width: 85px;
+            height: 85px;
+            background: linear-gradient(135deg, #00ff88, #00cc66);
+            border-radius: 40% 60% 60% 40% / 40% 40% 60% 60%;
+            margin: 0 auto 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.6);
+            animation: blobMorph 4s ease-in-out infinite alternate;
+        }
+
+        /* Olhos do Blob */
+        .blob-character-avatar::before {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #020804;
+            border-radius: 50%;
+            left: 26px;
+            top: 35px;
+            box-shadow: 24px 0 0 #020804;
+            animation: blobBlink 3s infinite;
+        }
+
+        /* Boca Sorridente do Blob */
+        .blob-character-avatar::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 8px;
+            border-bottom: 3px solid #020804;
+            border-radius: 0 0 10px 10px;
+            left: 34px;
+            top: 44px;
+        }
+
+        @keyframes blobMorph {
+            0% { border-radius: 40% 60% 60% 40% / 40% 40% 60% 60%; }
+            100% { border-radius: 60% 40% 40% 60% / 60% 60% 40% 40%; }
+        }
+
+        @keyframes blobBlink {
+            0%, 95%, 100% { transform: scaleY(1); }
+            97% { transform: scaleY(0.1); }
+        }
+
+        .blob-popup h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 22px;
+            color: #fff;
+            margin-bottom: 12px;
+        }
+
+        .blob-popup p {
+            font-size: 15px;
+            color: #bbf7d0;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .blob-code-badge {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px dashed var(--primary);
+            padding: 10px 18px;
+            border-radius: 12px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+            display: inline-block;
+            margin-bottom: 25px;
+            letter-spacing: 2px;
+        }
+
+        .btn-blob-confirm {
+            background: var(--primary);
+            color: #020804;
+            border: none;
+            width: 100%;
+            padding: 15px;
+            border-radius: 100px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 14px;
+            font-weight: 800;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.2s;
+            letter-spacing: 1px;
+        }
+        .btn-blob-confirm:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 255, 136, 0.4);
+        }
+    </style>
 </head>
-<body class="state-idle">
+<body>
 
 <canvas id="bg-canvas"></canvas>
-<div class="cursor-glow" id="cursorGlow"></div>
 
 <div id="app-container">
+    
+    <main class="main-content">
+        <header class="top-nav">
+            <div class="nav-brand">HYPELAB<span>.</span></div>
+            <a href="https://wa.me/5511949946730" target="_blank" class="btn btn-outline">Fale Comigo ↗</a>
+        </header>
 
-    <!-- Top Navigation Bar Layout -->
-    <nav class="profile-nav">
-        <div class="nav-brand">HYPELAB.CORE</div>
-        <div class="nav-actions">
-            <a href="#" id="cta-whatsapp-link" target="_blank" class="nav-btn purple">Let's Talk ↗</a>
+        <div class="ticker-wrap">
+            <div class="ticker-item"><span class="ticker-icon">✦</span> UI/UX Design Premium</div>
+            <div class="ticker-item"><span class="ticker-icon">✦</span> Criação de Lojas Express</div>
+            <div class="ticker-item"><span class="ticker-icon">✦</span> Direção Criativa</div>
+            <div class="ticker-item"><span class="ticker-icon">✦</span> Otimização de Leads SMM</div>
+            <div class="ticker-item"><span class="ticker-icon">✦</span> Integração IA (Blob)</div>
         </div>
-    </nav>
 
-    <!-- Specialty Ticker Horizontal Bar -->
-    <div class="ticker-container">
-        <div class="ticker-item">UI/UX Design</div>
-        <div class="ticker-item">Web Design</div>
-        <div class="ticker-item">App Design</div>
-        <div class="ticker-item">Web Development</div>
-        <div class="ticker-item">Brand Strategy</div>
-    </div>
-
-    <!-- Main Content Flow -->
-    <div class="main-content-flow">
-        
-        <!-- Profile Hero Card -->
-        <section class="profile-hero-card">
-            <div class="avatar-block">
-                <div class="avatar-wrapper effect-pulse" id="avatarContainer">
-                    <img src="" class="avatar-img" id="profileImage" alt="CEO Avatar">
-                </div>
-                <button class="effect-toggle-btn" onclick="toggleAvatarEffect()">Efeito: ON/OFF</button>
+        <section class="hero-card">
+            <div class="avatar-section">
+                <div class="avatar-spin-ring"></div>
+                <img src="https://cdn.jsdelivr.net/gh/HYPELABdev/Vitrinni/img/img_1780338234790.jpg" alt="Yuri Foster" class="avatar-img">
             </div>
-
-            <div class="profile-info-block">
-                <span class="info-tag">ABOUT ME / FOUNDER</span>
-                <h1 class="editable-text" contenteditable="true" spellcheck="false">Sou o Fundador & CEO da HypeLab, Desenvolvendo Soluções Digitais Premium.</h1>
-                <p class="editable-text" contenteditable="true" spellcheck="false">Lidero a criação de ecossistemas visuais de alta performance e lojas interativas. Clique em qualquer texto desta seção ou nos contadores abaixo para editar e customizar as informações do seu perfil em tempo real.</p>
-                
-                <!-- Counters Row -->
-                <div class="counters-grid">
-                    <div class="counter-card">
-                        <div class="counter-icon">✨</div>
-                        <div class="counter-value-wrapper">
-                            <span class="editable-text" contenteditable="true" spellcheck="false">02</span>+
-                        </div>
-                        <div class="counter-label editable-text" contenteditable="true" spellcheck="false">Anos de Experiência</div>
-                    </div>
-                    <div class="counter-card">
-                        <div class="counter-icon">👥</div>
-                        <div class="counter-value-wrapper">
-                            <span class="editable-text" contenteditable="true" spellcheck="false">450</span>+
-                        </div>
-                        <div class="counter-label editable-text" contenteditable="true" spellcheck="false">Pessoas Atendidas</div>
-                    </div>
-                    <div class="counter-card">
-                        <div class="counter-icon">🚀</div>
-                        <div class="counter-value-wrapper">
-                            <span class="editable-text" contenteditable="true" spellcheck="false">80</span>+
-                        </div>
-                        <div class="counter-label editable-text" contenteditable="true" spellcheck="false">Projetos Ativos</div>
-                    </div>
-                </div>
+            <div class="hero-info">
+                <span class="hero-tag">YURI FOSTER, 25 ANOS</span>
+                <h1 class="hero-title">Webdesigner & <span>Diretor Criativo.</span></h1>
+                <p class="hero-desc">Fundador da HypeLab. Especialista em construir ecossistemas visuais de alta performance e lojas online express. Desenvolvo plataformas responsivas, imersivas e limpas, integrando automações estratégicas para captar leads e vender no automático.</p>
             </div>
         </section>
 
-        <!-- Services Section -->
-        <section class="specialties-section">
-            <div class="section-header">
-                <span>SERVICES</span>
-                <h2>Meus Focos & Conhecimentos</h2>
+        <div class="stats-grid">
+            <div class="stat-box">
+                <span class="stat-icon">📈</span>
+                <span class="stat-number">+350</span>
+                <span class="stat-label">Leads Gerados</span>
             </div>
-            <div class="specialties-grid">
-                <div class="specialty-card">
-                    <div class="specialty-icon">💻</div>
-                    <h3 class="editable-text" contenteditable="true" spellcheck="false">Web Design Premium</h3>
-                    <p class="editable-text" contenteditable="true" spellcheck="false">Desenvolvimento de interfaces modernas, fluidas e imersivas com alta conversão visual.</p>
-                </div>
-                <div class="specialty-card">
-                    <div class="specialty-icon">⚡</div>
-                    <h3 class="editable-text" contenteditable="true" spellcheck="false">Tecnologia Express</h3>
-                    <p class="editable-text" contenteditable="true" spellcheck="false">Arquiteturas leves baseadas em HTML/JSON que permitem edições instantâneas pelo cliente.</p>
-                </div>
-                <div class="specialty-card">
-                    <div class="specialty-icon">🧠</div>
-                    <h3 class="editable-text" contenteditable="true" spellcheck="false">Cognitive AI Engines</h3>
-                    <p class="editable-text" contenteditable="true" spellcheck="false">Sistemas de atendimento automatizados com personificações ricas, como o assistente Blob.</p>
-                </div>
+            <div class="stat-box">
+                <span class="stat-icon">⚡</span>
+                <span class="stat-number">100%</span>
+                <span class="stat-label">Foco em Conversão</span>
             </div>
-        </section>
-
-        <!-- Lojinha Express Informative Module -->
-        <section class="express-showcase-box">
-            <span class="badge-price-tag editable-text" contenteditable="true" spellcheck="false">R$ 150 / mês</span>
-            
-            <div class="express-thumb-zone">
-                <img src="" id="expressShowcaseImage" alt="Lojinha Express Layout Preview Asset">
-                <div class="express-thumb-overlay"></div>
-            </div>
-
-            <div class="express-info-panel">
-                <span class="info-tag" style="color: var(--primary);">MODELO INFORMATIVO EDITÁVEL</span>
-                <h3 class="editable-text" contenteditable="true" spellcheck="false">Lojinha Express v3.0</h3>
-                <p class="editable-text" contenteditable="true" spellcheck="false">Esta seção simula o preview do produto Lojinha Express. Modifique o título, a descrição ou o badge de preço acima livremente em tempo real. Clique no botão abaixo para rodar o simulador completo do core da loja.</p>
-                
-                <button class="btn-trigger-preview" id="simulador-btn" onclick="openLiveSystem()">
-                    Abrir Simulador da Loja Express
-                </button>
-            </div>
-        </section>
-
-    </div>
-
-    <!-- Right Side Sticky Column: Blob Virtual Attendant Frame -->
-    <aside class="blob-sidebar-panel">
-        
-        <div class="blob-stage-container">
-            <div id="smoke-wrap"></div>
-            <div class="blob-aura"></div><div class="blob-aura"></div>
-            <div class="blob-ground-shadow"></div>
-            
-            <div class="lring lring-1"></div>
-
-            <div class="blob-core-wrap" id="blobCoreWrap">
-                <div class="blob-render-body" onclick="triggerBlobClick()">
-                    <div class="blob-render-eyes" id="blobEyesWrap">
-                        <div class="blob-eye-node" id="eyeL"></div>
-                        <div class="blob-eye-node" id="eyeR"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="blob-meta-badge">
-                <h4>BLOB ASSISTENTE</h4>
-                <span id="blobStatusText">● OPERANTE // IDLE</span>
+            <div class="stat-box">
+                <span class="stat-icon">🚀</span>
+                <span class="stat-number">24/7</span>
+                <span class="stat-label">Automação IA</span>
             </div>
         </div>
 
-        <div class="chat-stream-viewport" id="chatViewport"></div>
-
-        <div class="blob-input-dock">
-            <div class="dock-flex-row">
-                <input type="text" class="dock-text-input" id="chatInputField" placeholder="Pergunte sobre a HypeLab ou Planos..." maxlength="300">
-                <button class="dock-send-btn" onclick="processUserChatMessage()">
-                    <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
-                </button>
+        <section class="express-cta" id="projetos" onclick="openSimulador()">
+            <div class="cta-preview-box">
+                <div class="preview-container-inner">
+                    <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80" alt="Vitrinni Store Preview">
+                </div>
+                <div class="floating-preview-btn">
+                    <span>Testar Loja Ao Vivo</span> 🚀
+                </div>
             </div>
-        </div>
+        </section>
+    </main>
 
+    <aside class="blob-sidebar">
+        <iframe src="https://hypelab-xi.vercel.app/" class="blob-iframe" title="Assistente Blob IA HypeLab"></iframe>
     </aside>
-
 </div>
 
-<!-- Fullscreen Live Preview Interactive Screen Simulator Modals -->
-<div class="preview-overlay" id="previewOverlaySystem">
-    <div class="preview-header-bar">
-        <div class="preview-headline">
-            <h2>Painel Interativo de Edição Ativo</h2>
-            <p>HYPELAB SIMULATOR // LOJINHA EXPRESS PREVIEW</p>
-        </div>
-        <button class="close-overlay-btn" onclick="closeLiveSystem()">Sair do Simulador</button>
+<div class="overlay" id="iframeOverlay">
+    <div class="overlay-header">
+        <h3>Simulador HypeLab: Lojinha Express</h3>
+        <button class="close-btn" onclick="closeSimulador()">Fechar [X]</button>
     </div>
     
-    <div class="preview-iframe-wrapper">
-        <div class="simulated-loader-msg" id="loaderMsg">CONECTANDO AO REPOSITÓRIO CORE DA LOJA...</div>
-        <iframe id="previewIframe" src="" sandbox="allow-scripts allow-same-origin allow-forms allow-modals"></iframe>
-        
-        <div class="hbot-popup-box" id="hbotPopupBox">
-            <div class="hbot-title">🟢 H-BOT // PROTOCOLO_AUTENTICACAO</div>
-            <div class="hbot-steps">
-                <p><strong>Acesso Liberado com Sucesso!</strong> Siga estas diretrizes para habilitar as mutações em tempo real na loja demonstrativa:</p>
-                <ol>
-                    <li>Procure pelo ícone de <strong>Engrenagem</strong> localizado na base inferior do site carregado.</li>
-                    <li>Clique para invocar a janela de checagem técnica.</li>
-                    <li>Forneça o token de criptografia global: <span class="pass-badge" id="hbot-token-label">HYPELAB2026</span></li>
-                    <li>Pronto! O menu lateral aparecerá ativo para customizações dinâmicas instantâneas.</li>
-                </ol>
+    <div class="iframe-container">
+        <div class="blob-popup" id="blobInstructionPopup">
+            <div class="blob-popup-card">
+                <div class="blob-character-avatar"></div>
+                <h4>Instruções do Blob</h4>
+                <p>Para testar o painel de edição em tempo real, clique no ícone da <strong>engrenagem</strong> dentro da loja e insira a chave de acesso abaixo:</p>
+                <div class="blob-code-badge">LAB420</div>
+                <button class="btn-blob-confirm" onclick="closeBlobPopup()">Entendido, vamos lá! 🚀</button>
             </div>
-            <button class="hbot-close-btn" onclick="dismissHbotBox()">Iniciar Testes de Edição</button>
         </div>
+        
+        <iframe id="storeIframe" src=""></iframe>
     </div>
 </div>
 
 <script>
-/* ==========================================================================
-   ⚙️ PAINEL DE CONFIGURAÇÃO GLOBAL (ALTRERE OS LINKS E TEXTOS DO BLOB AQUI)
-   ========================================================================== */
-const CONFIG_PAINEL = {
-    // 🖼️ Imagens do Perfil (Coloque os links que preferir aqui)
-    urlImagemPerfil: "https://cdn.jsdelivr.net/gh/HYPELABdev/Vitrinni/img/img_1780338234790.jpg",
-    urlImagemLojinha: "https://cdn.jsdelivr.net/gh/HYPELABdev/Vitrinni/img/img_1778860621823.jpg",
+    const canvas = document.getElementById('bg-canvas');
+    const ctx = canvas.getContext('2d');
     
-    // 🔗 Links Externos e Simulação
-    linkWhatsApp: "https://wa.me/5511949946730",
-    linkSimuladorLoja: "https://hypelabdev.github.io/Vitrinni/express-preview",
-    tokenHBot: "HYPELAB2026", // Token que aparece no modal interno
-
-    // 🧠 Banco de Dados de Memória e Comandos do BLOB (Modifique as falas dele aqui)
-    blobRespostas: {
-        saudacoes: [
-            "Olá! 👋 Sou o **BLOB**, assistente inteligente da **HypeLab**. Estou aqui para te contar tudo sobre nossa agência e ajudar a promover as ideias do nosso fundador! O que quer saber?", 
-            "Opa! Tudo bem? 🟢 Sou o atendente virtual aqui do portfólio. Quer conhecer mais sobre o trabalho da HypeLab ou ver detalhes da nossa famosa **Lojinha Express**?"
-        ],
-        hypelab: [
-            "A **HypeLab** é um ecossistema focado no desenvolvimento de marcas digitais de elite, landing pages de alta conversão e lojas online customizáveis. Criamos experiências premium modernas utilizando tecnologias leves e rápidas!", 
-            "Nossa missão na **HypeLab** é tirar a complexidade técnica do caminho. Nós estruturamos layouts imersivos, organizados por códigos limpos, e integramos inteligências virtuais customizadas para automatizar os seus canais de atendimento e conversão."
-        ],
-        express: [
-            "A **Lojinha Express** é o nosso produto campeão para quem precisa de agilidade! Por apenas **R$ 150 por mês**, você tem uma vitrine digital completa, limpa e de alta performance. O melhor? Ela vem com um painel dinâmico para você mesmo alterar cores, banners, logo e produtos em tempo real sem precisar de código!", 
-            "Buscando custo-benefício? O modelo da **Lojinha Express por R$ 150/mês** possui sincronização via banco de dados simples (JSON/HTML), carregamento ultra-rápido, otimização SEO integrada e envio direto dos pedidos para o seu WhatsApp corporativo. Teste o simulador clicando no botão ali na tela!"
-        ],
-        fundador: [
-            "Nosso fundador é o CEO e Webdesigner chefe da HypeLab. Ele projetou esta página inteiramente customizável para demonstrar nosso padrão visual e nosso know-how técnico em criar interfaces modernas de alto impacto. Sinta-se livre para editar os textos do perfil ao lado!", 
-            "O CEO e Webdesigner fundador da HypeLab lidera o desenvolvimento conceitual de toda a nossa engenharia visual. Ele foca em UI/UX Premium, automações robustas e em garantir que pequenos e médios negócios tenham presença digital competitiva."
-        ],
-        padrao: [
-            "Legal! Entendi perfeitamente. Se quiser fechar um projeto desse nível ou tirar dúvidas técnicas avançadas, recomendo dar um toque direto no nosso canal de atendimento! Fale Conosco pelo link: [**Abrir WhatsApp Oficial**](https://wa.me/5511949946730).", 
-            "Interessante! Que tal testar a nossa tecnologia editando os campos da Lojinha Express ou do perfil do fundador na tela? Caso precise de uma proposta personalizada para a sua empresa, conte comigo ou [**Chame no WhatsApp**](https://wa.me/5511949946730)!"
-        ]
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
     }
-};
+    window.addEventListener('resize', resizeCanvas, { passive: true });
+    resizeCanvas();
 
-/* ==========================================================================
-   🚀 MOTOR DE INICIALIZAÇÃO DA INTERFACE
-   ========================================================================== */
-function inicializarImagensELinks() {
-    document.getElementById('profileImage').src = CONFIG_PAINEL.urlImagemPerfil;
-    document.getElementById('expressShowcaseImage').src = CONFIG_PAINEL.urlImagemLojinha;
-    document.getElementById('cta-whatsapp-link').href = CONFIG_PAINEL.linkWhatsApp;
-    document.getElementById('hbot-token-label').innerText = CONFIG_PAINEL.tokenHBot;
-}
-inicializarImagensELinks();
-
-/* 1. BACKGROUND CANVAS PARTICLES SYSTEM */
-const canvas = document.getElementById('bg-canvas');
-const ctx = canvas.getContext('2d');
-let width, height, particles = [];
-
-function adjustCanvasSize() {
-    width = canvas.width = window.innerWidth;
-    height = canvas.height = window.innerHeight;
-}
-adjustCanvasSize();
-window.addEventListener('resize', adjustCanvasSize);
-
-class ParticleNode {
-    constructor() { this.reset(); }
-    reset() {
-        this.x = Math.random() * width;
-        this.y = Math.random() * height;
-        this.vx = (Math.random() - 0.5) * 0.04;
-        this.vy = (Math.random() - 0.5) * 0.04;
-        this.radius = Math.random() * 1.2 + 0.2;
-        this.alpha = Math.random() * 0.08 + 0.01;
-        this.life = Math.random() * 300 + 100;
-        this.maxLife = this.life;
+    const particles = [];
+    for(let i=0; i<30; i++) { // Reduzido de 45 para 30 para economizar CPU mobile
+        particles.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            vx: (Math.random() - 0.5) * 0.15,
+            vy: (Math.random() - 0.5) * 0.15,
+            size: Math.random() * 1.8 + 0.5,
+            alpha: Math.random() * 0.3 + 0.1
+        });
     }
-    update() {
-        this.x += this.vx; this.y += this.vy; this.life--;
-        if (this.life <= 0 || this.x < 0 || this.x > width || this.y < 0 || this.y > height) this.reset();
-    }
-    draw() {
-        ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(0, 255, 136, ${this.alpha * (this.life / this.maxLife)})`; ctx.fill();
-    }
-}
-for (let i = 0; i < 35; i++) particles.push(new ParticleNode());
-
-function renderFrameLoop() {
-    ctx.clearRect(0, 0, width, height);
-    const grad = ctx.createRadialGradient(width/2, height*0.5, 0, width/2, height*0.5, Math.min(width, height)*0.6);
-    grad.addColorStop(0, 'rgba(0, 255, 136, 0.015)'); grad.addColorStop(1, 'transparent');
-    ctx.fillStyle = grad; ctx.fillRect(0, 0, width, height);
     
-    for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-            const dist = Math.hypot(particles[i].x - particles[j].x, particles[i].y - particles[j].y);
-            if (dist < 90) {
-                ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(particles[j].x, particles[j].y);
-                ctx.strokeStyle = `rgba(0, 255, 136, ${0.02 * (1 - dist/90)})`; ctx.lineWidth = 0.5; ctx.stroke();
-            }
-        }
+    let animationFrameId;
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => {
+            p.x += p.vx; p.y += p.vy;
+            if(p.x < 0 || p.x > canvas.width) p.vx *= -1;
+            if(p.y < 0 || p.y > canvas.height) p.vy *= -1;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(0, 255, 136, ${p.alpha})`;
+            ctx.fill();
+        });
+        animationFrameId = requestAnimationFrame(draw);
     }
-    particles.forEach(p => { p.update(); p.draw(); });
-    requestAnimationFrame(renderFrameLoop);
-}
-renderFrameLoop();
+    draw();
 
-/* 2. CURSOR GLOW TRACKING */
-const glow = document.getElementById('cursorGlow');
-document.addEventListener('mousemove', e => {
-    glow.style.left = e.clientX + 'px'; glow.style.top = e.clientY + 'px';
-});
-
-/* 3. BLOB SMOKE ENGINE */
-const smokeWrap = document.getElementById('smoke-wrap');
-const smokeColors = ['rgba(0,255,136,0.12)', 'rgba(99,102,241,0.08)', 'rgba(0,200,100,0.06)'];
-for (let i = 0; i < 12; i++) {
-    const smokeDot = document.createElement('div'); smokeDot.className = 'sp';
-    const size = 20 + Math.random() * 30;
-    const xPos = 40 + Math.random() * 40;
-    const duration = 2 + Math.random() * 2;
-    const delay = -Math.random() * 4;
-    const rot = (Math.random() * 60 - 30) + 'deg';
-    smokeDot.style.cssText = `width:${size}px; height:${size}px; left:${xPos}px; bottom:40px; background:${smokeColors[Math.floor(Math.random()*smokeColors.length)]}; animation-duration:${duration}s; animation-delay:${delay}s; --r:${rot};`;
-    smokeWrap.appendChild(smokeDot);
-}
-
-/* 4. VECTOR EYE TRACKING */
-const eyesContainer = document.getElementById('blobEyesWrap');
-const leftEyeNode = document.getElementById('eyeL');
-const rightEyeNode = document.getElementById('eyeR');
-
-function updateEyePosition(clientX, clientY) {
-    const rect = eyesContainer.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-    const angle = Math.atan2(clientY - centerY, clientX - centerX);
-    const distance = Math.min(2.5, Math.hypot(clientX - centerX, clientY - centerY) / 90);
-    eyesContainer.style.transform = `translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px)`;
-}
-document.addEventListener('mousemove', e => updateEyePosition(e.clientX, e.clientY));
-
-function executeBlinkCycle() {
-    setTimeout(() => {
-        leftEyeNode.classList.add('blink'); rightEyeNode.classList.add('blink');
+    // Controle do Simulador e Trava de Scroll
+    function openSimulador() {
+        const overlay = document.getElementById('iframeOverlay');
+        const iframe = document.getElementById('storeIframe');
+        const popup = document.getElementById('blobInstructionPopup');
+        
+        document.body.classList.add('modal-open');
+        overlay.style.display = 'flex';
+        
         setTimeout(() => {
-            leftEyeNode.classList.remove('blink'); rightEyeNode.classList.remove('blink');
-            executeBlinkCycle();
-        }, 120);
-    }, 2500 + Math.random() * 3500);
-}
-executeBlinkCycle();
-
-/* 5. EFFECTS CONTROLLER */
-function toggleAvatarEffect() {
-    document.getElementById('avatarContainer').classList.toggle('effect-pulse');
-}
-
-/* 6. CHAT CONVERSATIONAL AGENT ENGINE (CONECTADO AO CONFIG_PAINEL) */
-const viewport = document.getElementById('chatViewport');
-const textInput = document.getElementById('chatInputField');
-let conversationalState = 'idle';
-
-function changeBlobState(newState) {
-    conversationalState = newState;
-    document.body.className = `state-${newState}`;
-    const statusLabel = document.getElementById('blobStatusText');
-    if (newState === 'thinking') statusLabel.innerText = '● PROCESSANDO...';
-    else if (newState === 'happy') statusLabel.innerText = '▲ OPERANTE // HAPPY';
-    else statusLabel.innerText = '● OPERANTE // IDLE';
-}
-
-function appendChatBubble(sender, text, quickReplies = []) {
-    const row = document.createElement('div');
-    row.className = `chat-bubble-row ${sender}`;
-    let avatarNode = sender === 'blob' ? '<div class="mini-avatar-node"></div>' : '';
-    let processedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                            .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank">$1</a>');
-    
-    let repliesHTML = '';
-    if (quickReplies.length > 0) {
-        repliesHTML = `<div class="replies-wrapper-dock">` + 
-            quickReplies.map(r => `<button class="reply-pill-btn" onclick="triggerQuickReply('${r}')">${r}</button>`).join('') + 
-            `</div>`;
+            overlay.classList.add('active');
+            popup.classList.add('active');
+        }, 10);
+        
+        iframe.src = 'https://hypelabofc.site/VITRINNI.html';
     }
-    row.innerHTML = `${avatarNode}<div><div class="speech-bubble">${processedText}</div>${repliesHTML}</div>`;
-    viewport.appendChild(row);
-    viewport.scrollTop = viewport.scrollHeight;
-}
-
-function displayTypingIndicator() {
-    const row = document.createElement('div');
-    row.className = 'chat-bubble-row blob';
-    row.id = 'typingIndicator';
-    row.innerHTML = '<div class="mini-avatar-node"></div><div class="typing-loader-bubble"><div class="dot-node"></div><div class="dot-node"></div><div class="dot-node"></div></div>';
-    viewport.appendChild(row);
-    viewport.scrollTop = viewport.scrollHeight;
-}
-
-function removeTypingIndicator() {
-    const ind = document.getElementById('typingIndicator');
-    if (ind) ind.remove();
-}
-
-function processUserChatMessage(forcedText = null) {
-    const query = forcedText || textInput.value.trim();
-    if (!query) return;
-    if (!forcedText) textInput.value = '';
-
-    appendChatBubble('user', query);
-    changeBlobState('thinking');
-    displayTypingIndicator();
-
-    setTimeout(() => {
-        removeTypingIndicator();
-        let normalized = query.toLowerCase();
-        let responseText = "";
-        let options = [];
-
-        // Inteligência e Respostas puxadas diretamente do CONFIG_PAINEL do topo
-        if (normalized.includes('loja') || normalized.includes('express') || normalized.includes('150')) {
-            responseText = CONFIG_PAINEL.blobRespostas.express[Math.floor(Math.random()*CONFIG_PAINEL.blobRespostas.express.length)];
-            options = ["Como Contratar?", "Falar com CEO"];
-            changeBlobState('happy');
-        } else if (normalized.includes('hypelab') || normalized.includes('agência') || normalized.includes('agencia')) {
-            responseText = CONFIG_PAINEL.blobRespostas.hypelab[Math.floor(Math.random()*CONFIG_PAINEL.blobRespostas.hypelab.length)];
-            options = ["Ver Lojinha Express", "Conhecer Fundador"];
-            changeBlobState('happy');
-        } else if (normalized.includes('ceo') || normalized.includes('fundador') || normalized.includes('webdesigner')) {
-            responseText = CONFIG_PAINEL.blobRespostas.fundador[Math.floor(Math.random()*CONFIG_PAINEL.blobRespostas.fundador.length)];
-            options = ["Ver Plano R$ 150", "Chamar no WhatsApp"];
-            changeBlobState('happy');
-        } else {
-            responseText = CONFIG_PAINEL.blobRespostas.padrao[Math.floor(Math.random()*CONFIG_PAINEL.blobRespostas.padrao.length)];
-            options = ["Ver Preços", "Sobre a HypeLab"];
-            changeBlobState('idle');
-        }
-
-        appendChatBubble('blob', responseText, options);
-    }, 1000);
-}
-
-function triggerQuickReply(text) { processUserChatMessage(text); }
-function triggerBlobClick() { changeBlobState('happy'); processUserChatMessage("Me conta sobre a HypeLab! 🚀"); }
-textInput.addEventListener('keydown', e => { if(e.key === 'Enter') processUserChatMessage(); });
-
-/* 7. IFRAME PREVIEW SYSTEM MODAL (CONECTADO AO CONFIG_PAINEL) */
-function openLiveSystem() {
-    const overlay = document.getElementById('previewOverlaySystem');
-    const iframe = document.getElementById('previewIframe');
-    const msg = document.getElementById('loaderMsg');
-    const hbot = document.getElementById('hbotPopupBox');
     
-    overlay.style.display = 'flex';
-    setTimeout(() => overlay.classList.add('active'), 10);
+    function closeBlobPopup() {
+        document.getElementById('blobInstructionPopup').classList.remove('active');
+    }
     
-    iframe.classList.remove('loaded');
-    iframe.src = CONFIG_PAINEL.linkSimuladorLoja;
-    msg.style.display = 'block';
-    hbot.classList.remove('show');
-
-    iframe.onload = function() {
-        msg.style.display = 'none';
-        iframe.classList.add('loaded');
-        setTimeout(() => { hbot.classList.add('show'); }, 600);
-    };
-}
-
-function closeLiveSystem() {
-    const overlay = document.getElementById('previewOverlaySystem');
-    const iframe = document.getElementById('previewIframe');
-    document.getElementById('hbotPopupBox').classList.remove('show');
-    overlay.classList.remove('active');
-    setTimeout(() => { overlay.style.display = 'none'; iframe.src = ''; }, 400);
-}
-
-function dismissHbotBox() { document.getElementById('hbotPopupBox').classList.remove('show'); }
-
-window.onload = () => {
-    setTimeout(() => {
-        appendChatBubble('blob', CONFIG_PAINEL.blobRespostas.saudacoes[0], ["🛍️ Lojinha Express", "⚡ Ver HypeLab", "👑 Conhecer Fundador"]);
-    }, 400);
-};
+    function closeSimulador() {
+        const overlay = document.getElementById('iframeOverlay');
+        const popup = document.getElementById('blobInstructionPopup');
+        
+        overlay.classList.remove('active');
+        popup.classList.remove('active');
+        document.body.classList.remove('modal-open');
+        
+        setTimeout(() => {
+            overlay.style.display = 'none';
+            document.getElementById('storeIframe').src = '';
+        }, 400);
+    }
 </script>
-
 </body>
 </html>
