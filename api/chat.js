@@ -48,7 +48,13 @@ module.exports = async (req, res) => {
     rawHistory.forEach(msg => {
       if (msg.role === 'user' || msg.role === 'assistant') {
         const role = msg.role === 'assistant' ? 'model' : 'user';
-        // Evita duplicar papéis seguidos no histórico, o que quebra o Gemini
+        
+        // CORREÇÃO: Ignora se a primeira mensagem do histórico for do modelo/robô
+        if (chatHistory.length === 0 && role === 'model') {
+          return; 
+        }
+
+        // Evita duplicar papéis seguidos no histórico
         if (chatHistory.length === 0 || chatHistory[chatHistory.length - 1].role !== role) {
           chatHistory.push({
             role: role,
@@ -58,7 +64,7 @@ module.exports = async (req, res) => {
       }
     });
 
-    // Inicia o chat com o histórico higienizado
+    // Inicia o chat com o histórico higienizado e começando estritamente por 'user'
     const chat = model.startChat({
       history: chatHistory
     });
@@ -75,9 +81,8 @@ module.exports = async (req, res) => {
 
   } catch (error) {
     console.error("Erro no Gemini:", error);
-    // Retorna o erro detalhado para o seu chat exibir se algo der errado na API
     return res.status(200).json({
-      content: [{ text: `Tive um problema técnico: ${error.message}. Tenta de novo? 😅` }]
+      content: [{ text: `Tive um problema técnico: [GoogleGenerativeAI Error]: ${error.message}. Tenta de novo? 😅` }]
     });
   }
 };
