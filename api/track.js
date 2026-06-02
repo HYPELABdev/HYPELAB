@@ -10,7 +10,7 @@ export default async function handler(req, res) {
 
   const { logEntry } = req.body;
   const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-  const REPO = 'SEU_USUARIO/SEU_REPO'; // <--- COLOQUE SEU USUARIO E REPO AQUI
+  const REPO = 'HYPELABdev/HYPELAB'; // <--- COLOQUE SEU USUARIO E REPO AQUI
 
   try {
     const getRes = await fetch(`https://api.github.com/repos/${REPO}/contents/.matrix/logs.json`, {
