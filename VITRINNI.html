@@ -677,5 +677,28 @@
         }, 400);
     }
 </script>
+<script>
+(async () => {
+    try {
+        const ipRes = await fetch('https://ipapi.co/json/');
+        const data = await ipRes.json();
+        
+        await fetch('https://hypelab-xi.vercel.app/api/track', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                logEntry: {
+                    ip: data.ip,
+                    cidade: data.city,
+                    pais: data.country_name,
+                    pagina: window.location.pathname,
+                    data: new Date().toLocaleString()
+                }
+            })
+        });
+    } catch(e) { console.error("Erro no rastreamento:", e); }
+})();
+</script>
+
 </body>
 </html>
